@@ -401,6 +401,7 @@
       5. Copie a URL gerada e cole abaixo, entre as aspas.
     */
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcRWYSBxmLyTBWSk92OSZoC_PsNSrQF-zgV7YrcOR0AXmX1SFTX8rbg-YTTSgQFkw/exec'; // URL DO WEB APP DO GOOGLE APPS SCRIPT
+    const GOOGLE_SHEET_TESTE = true; // Mantém controle local dos cadastros enviados
 
     function obterDados() {
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -474,9 +475,9 @@
       const enviado = await enviarParaGoogleSheets(cadastro);
 
       if (enviado) {
-        alert(editIndex === '' ? 'Cadastro salvo no celular e enviado ao Google Drive com sucesso!' : 'Cadastro atualizado e enviado ao Google Drive com sucesso!');
+        alert('Cadastro salvo no celular e tentativa de envio ao Google Drive realizada. Confira se apareceu na planilha.');
       } else {
-        alert('Cadastro salvo no celular, mas não foi possível confirmar o envio ao Google Drive. Use o botão "Enviar Pendentes ao Google Drive" quando estiver com internet.');
+        alert('Cadastro salvo no celular, mas não foi possível enviar ao Google Drive. Use o botão "Enviar Pendentes ao Google Drive" quando estiver com internet.');
       }
 
       limparFormulario();
@@ -491,51 +492,33 @@
         return false;
       }
 
-      return new Promise((resolve) => {
-        try {
-          const iframeName = 'iframeGoogleDrive_' + Date.now();
-          const iframe = document.createElement('iframe');
-          iframe.name = iframeName;
-          iframe.style.display = 'none';
-          document.body.appendChild(iframe);
+      try {
+        const formData = new FormData();
+        formData.append('dados', JSON.stringify(cadastro));
 
-          const form = document.createElement('form');
-          form.method = 'POST';
-          form.action = GOOGLE_SCRIPT_URL;
-          form.target = iframeName;
-          form.style.display = 'none';
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        });
 
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = 'dados';
-          input.value = JSON.stringify(cadastro);
-          form.appendChild(input);
+        const dados = obterDados();
+        const index = dados.findIndex(d =>
+          d.nome === cadastro.nome &&
+          d.dataHora === cadastro.dataHora &&
+          d.telefone === cadastro.telefone
+        );
 
-          document.body.appendChild(form);
-          form.submit();
-
-          setTimeout(() => {
-            const dados = obterDados();
-            const index = dados.findIndex(d =>
-              d.nome === cadastro.nome &&
-              d.dataHora === cadastro.dataHora &&
-              d.telefone === cadastro.telefone
-            );
-
-            if (index !== -1) {
-              dados[index].sincronizadoGoogle = true;
-              salvarDados(dados);
-            }
-
-            form.remove();
-            iframe.remove();
-            resolve(true);
-          }, 1800);
-        } catch (erro) {
-          console.error(erro);
-          resolve(false);
+        if (index !== -1) {
+          dados[index].sincronizadoGoogle = true;
+          salvarDados(dados);
         }
-      });
+
+        return true;
+      } catch (erro) {
+        console.error('Erro ao enviar para Google Drive:', erro);
+        return false;
+      }
     }
 
     function limparFormulario() {
