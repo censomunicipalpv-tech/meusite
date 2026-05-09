@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Censo Municipal</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -246,6 +247,27 @@
       padding: 20px;
     }
 
+    .status {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      display: none;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .status.ok {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status.erro {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
     footer {
       text-align: center;
       font-size: 12px;
@@ -268,6 +290,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>App Censo Municipal</h1>
@@ -275,15 +298,18 @@
   </header>
 
   <div class="container">
+
     <div class="cards">
       <div class="card">
         <strong id="totalCadastros">0</strong>
         <span>Total de cadastros</span>
       </div>
+
       <div class="card">
         <strong id="totalMasculino">0</strong>
         <span>Masculino</span>
       </div>
+
       <div class="card">
         <strong id="totalFeminino">0</strong>
         <span>Feminino</span>
@@ -300,13 +326,13 @@
       <h2>Cadastro do Morador</h2>
 
       <form id="formCenso">
-        <input type="hidden" id="editIndex" value="" />
+        <input type="hidden" id="editIndex" value="">
 
         <label>Nome completo *</label>
-        <input type="text" id="nome" required placeholder="Digite o nome completo" />
+        <input type="text" id="nome" required placeholder="Digite o nome completo">
 
         <label>Idade *</label>
-        <input type="number" id="idade" required min="0" max="120" placeholder="Digite a idade" />
+        <input type="number" id="idade" required min="0" max="120" placeholder="Digite a idade">
 
         <label>Sexo *</label>
         <select id="sexo" required>
@@ -318,38 +344,38 @@
         </select>
 
         <label>Profissão *</label>
-        <input type="text" id="profissao" required placeholder="Ex: agricultor, estudante, servidor público" />
+        <input type="text" id="profissao" required placeholder="Ex: agricultor, estudante, servidor público">
 
         <label>Município *</label>
-        <input type="text" id="municipio" required placeholder="Digite o município" />
+        <input type="text" id="municipio" required placeholder="Digite o município">
 
         <label>Povoado/Bairro/Comunidade *</label>
-        <input type="text" id="povoado" required placeholder="Digite o povoado, bairro ou comunidade" />
+        <input type="text" id="povoado" required placeholder="Digite o povoado, bairro ou comunidade">
 
         <label>Telefone</label>
-        <input type="tel" id="telefone" placeholder="Digite o telefone" />
+        <input type="tel" id="telefone" placeholder="Digite o telefone">
 
         <label>Nome do entrevistador/recenseador *</label>
-        <input type="text" id="entrevistador" required placeholder="Digite o nome do entrevistador" />
+        <input type="text" id="entrevistador" required placeholder="Digite o nome do entrevistador">
 
         <label>O que precisa melhorar onde mora? *</label>
         <div class="checkbox-grid">
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Saúde" /> Saúde</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Educação" /> Educação</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Segurança" /> Segurança</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Transporte" /> Transporte</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Estradas" /> Estradas</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Água" /> Água</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Iluminação pública" /> Iluminação pública</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Limpeza urbana" /> Limpeza urbana</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Emprego" /> Emprego</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Assistência social" /> Assistência social</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Internet" /> Internet</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Esporte e lazer" /> Esporte e lazer</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Saúde"> Saúde</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Educação"> Educação</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Segurança"> Segurança</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Transporte"> Transporte</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Estradas"> Estradas</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Água"> Água</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Iluminação pública"> Iluminação pública</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Limpeza urbana"> Limpeza urbana</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Emprego"> Emprego</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Assistência social"> Assistência social</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Internet"> Internet</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Esporte e lazer"> Esporte e lazer</label>
         </div>
 
         <label>Outra melhoria</label>
-        <input type="text" id="outraMelhoria" placeholder="Caso não esteja na lista, descreva aqui" />
+        <input type="text" id="outraMelhoria" placeholder="Caso não esteja na lista, descreva aqui">
 
         <label>Descreva melhor a principal necessidade da comunidade *</label>
         <textarea id="descricao" required placeholder="Descreva com detalhes a necessidade informada"></textarea>
@@ -361,18 +387,21 @@
           <button type="submit" class="main" id="btnSalvar">Salvar Cadastro</button>
           <button type="button" class="secondary" onclick="limparFormulario()">Limpar</button>
         </div>
+
+        <div id="statusEnvio" class="status"></div>
       </form>
     </section>
 
     <section id="registros">
       <h2>Registros do Censo</h2>
-      <input class="search-box" type="text" id="pesquisa" placeholder="Pesquisar por nome, município, povoado, profissão ou entrevistador" oninput="listarRegistros()" />
+      <input class="search-box" type="text" id="pesquisa" placeholder="Pesquisar por nome, município, povoado, profissão ou entrevistador" oninput="listarRegistros()">
       <div id="listaRegistros"></div>
     </section>
 
     <section id="relatorios">
       <h2>Relatórios e Exportação</h2>
-      <p>Os dados ficam salvos neste aparelho pelo navegador e também podem ser enviados para uma Planilha Google no Drive quando a URL do Google Apps Script estiver configurada.</p>
+
+      <p>Os dados ficam salvos neste aparelho e também são enviados para a Planilha Google no Drive.</p>
 
       <div class="btn-row">
         <button class="main" onclick="exportarCSV()">Exportar Excel/CSV</button>
@@ -391,16 +420,8 @@
 
   <script>
     const STORAGE_KEY = 'censo_municipal_dados_v1';
-    
-    /*
-      PARA SALVAR NO GOOGLE DRIVE:
-      1. Crie uma Planilha Google no seu Drive. 
-      3. Cole o código Apps Script que vou te mandar no chat.
-      4. Publique como Web App.
-      5. Copie a URL gerada e cole abaixo, entre as aspas.
-    */
-    const GOOGLE_SCRIPT_URL = 'const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcRWYSBxmLyTBWSk92OSZoC_PsNSrQF-zgV7YrcOR0AXmX1SFTX8rbg-YTTSgQFkw/exec';';'; // URL DO WEB APP DO GOOGLE APPS SCRIPT
-    const GOOGLE_SHEET_TESTE = true; // Mantém controle local dos cadastros enviados
+
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcRWYSBxmLyTBWSk92OSZoC_PsNSrQF-zgV7YrcOR0AXmX1SFTX8rbg-YTTSgQFkw/exec';
 
     function obterDados() {
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -410,11 +431,24 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
     }
 
+    function mostrarStatus(mensagem, tipo) {
+      const el = document.getElementById('statusEnvio');
+      el.textContent = mensagem;
+      el.className = 'status ' + tipo;
+
+      setTimeout(() => {
+        el.className = 'status';
+        el.textContent = '';
+      }, 5000);
+    }
+
     function abrirAba(id, botao) {
       document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
       document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+
       document.getElementById(id).classList.add('active');
       botao.classList.add('active');
+
       listarRegistros();
       atualizarResumo();
     }
@@ -427,7 +461,11 @@
     function pegarMelhoriasSelecionadas() {
       const checks = Array.from(document.querySelectorAll('input[name="melhorias"]:checked')).map(c => c.value);
       const outra = document.getElementById('outraMelhoria').value.trim();
-      if (outra) checks.push(outra);
+
+      if (outra) {
+        checks.push(outra);
+      }
+
       return checks;
     }
 
@@ -435,6 +473,7 @@
       e.preventDefault();
 
       const melhorias = pegarMelhoriasSelecionadas();
+
       if (melhorias.length === 0) {
         alert('Selecione pelo menos uma melhoria necessária.');
         return;
@@ -444,6 +483,7 @@
       const editIndex = document.getElementById('editIndex').value;
 
       const cadastro = {
+        dataHora: editIndex === '' ? formatarDataHora() : dados[editIndex].dataHora,
         nome: document.getElementById('nome').value.trim(),
         idade: document.getElementById('idade').value.trim(),
         sexo: document.getElementById('sexo').value,
@@ -455,7 +495,6 @@
         melhorias: melhorias.join(', '),
         descricao: document.getElementById('descricao').value.trim(),
         observacoes: document.getElementById('observacoes').value.trim(),
-        dataHora: editIndex === '' ? formatarDataHora() : dados[editIndex].dataHora,
         atualizadoEm: editIndex === '' ? '' : formatarDataHora(),
         sincronizadoGoogle: false
       };
@@ -474,9 +513,9 @@
       const enviado = await enviarParaGoogleSheets(cadastro);
 
       if (enviado) {
-        alert('Cadastro salvo no celular e tentativa de envio ao Google Drive realizada. Confira se apareceu na planilha.');
+        mostrarStatus('Cadastro salvo no celular e tentativa de envio ao Google Drive realizada. Confira a planilha.', 'ok');
       } else {
-        alert('Cadastro salvo no celular, mas não foi possível enviar ao Google Drive. Use o botão "Enviar Pendentes ao Google Drive" quando estiver com internet.');
+        mostrarStatus('Cadastro salvo no celular, mas não foi possível enviar ao Google Drive.', 'erro');
       }
 
       limparFormulario();
@@ -487,7 +526,6 @@
 
     async function enviarParaGoogleSheets(cadastro) {
       if (!GOOGLE_SCRIPT_URL) {
-        console.log('Google Script URL não configurada. Cadastro salvo apenas localmente.');
         return false;
       }
 
@@ -502,6 +540,7 @@
         });
 
         const dados = obterDados();
+
         const index = dados.findIndex(d =>
           d.nome === cadastro.nome &&
           d.dataHora === cadastro.dataHora &&
@@ -528,6 +567,7 @@
 
     function atualizarPainel() {
       const dados = obterDados();
+
       document.getElementById('totalCadastros').textContent = dados.length;
       document.getElementById('totalMasculino').textContent = dados.filter(d => d.sexo === 'Masculino').length;
       document.getElementById('totalFeminino').textContent = dados.filter(d => d.sexo === 'Feminino').length;
@@ -535,6 +575,7 @@
 
     function listarRegistros() {
       const lista = document.getElementById('listaRegistros');
+
       if (!lista) return;
 
       const termo = (document.getElementById('pesquisa')?.value || '').toLowerCase();
@@ -553,8 +594,9 @@
         return;
       }
 
-      lista.innerHTML = filtrados.map((d, i) => {
+      lista.innerHTML = filtrados.map(d => {
         const indexReal = dados.indexOf(d);
+
         return `
           <div class="registro">
             <h3>${d.nome}</h3>
@@ -566,10 +608,11 @@
             <p><strong>Telefone:</strong> ${d.telefone || 'Não informado'}</p>
             <p><strong>Melhorias:</strong> ${d.melhorias}</p>
             <p><strong>Descrição:</strong> ${d.descricao}</p>
+            <p><strong>Observações:</strong> ${d.observacoes || 'Nenhuma'}</p>
             <p><strong>Entrevistador:</strong> ${d.entrevistador}</p>
             <p><strong>Data/Hora:</strong> ${d.dataHora}</p>
-            <p><strong>Sincronização Google Drive:</strong> ${d.sincronizadoGoogle ? 'Enviado' : 'Pendente/Local'}</p>
-            ${d.atualizadoEm ? `<p><strong>Atualizado em:</strong> ${d.atualizadoEm}</p>` : ''}
+            <p><strong>Google Drive:</strong> ${d.sincronizadoGoogle ? 'Enviado' : 'Pendente'}</p>
+
             <div class="acoes">
               <button class="edit-btn" onclick="editarRegistro(${indexReal})">Editar</button>
               <button class="delete-btn" onclick="excluirRegistro(${indexReal})">Excluir</button>
@@ -596,23 +639,32 @@
       document.getElementById('observacoes').value = d.observacoes;
 
       document.querySelectorAll('input[name="melhorias"]').forEach(c => c.checked = false);
+
       const melhorias = d.melhorias.split(',').map(m => m.trim());
+
       document.querySelectorAll('input[name="melhorias"]').forEach(c => {
-        if (melhorias.includes(c.value)) c.checked = true;
+        if (melhorias.includes(c.value)) {
+          c.checked = true;
+        }
       });
 
       document.getElementById('btnSalvar').textContent = 'Atualizar Cadastro';
+
       document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
       document.getElementById('cadastro').classList.add('active');
+
       document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
       document.querySelector('.tabs button').classList.add('active');
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function excluirRegistro(index) {
       if (!confirm('Deseja realmente excluir este cadastro?')) return;
+
       const dados = obterDados();
       dados.splice(index, 1);
+
       salvarDados(dados);
       atualizarPainel();
       listarRegistros();
@@ -621,6 +673,7 @@
 
     function atualizarResumo() {
       const el = document.getElementById('resumoRelatorio');
+
       if (!el) return;
 
       const dados = obterDados();
@@ -629,13 +682,19 @@
 
       dados.forEach(d => {
         porPovoado[d.povoado] = (porPovoado[d.povoado] || 0) + 1;
+
         d.melhorias.split(',').map(m => m.trim()).forEach(m => {
           porMelhoria[m] = (porMelhoria[m] || 0) + 1;
         });
       });
 
-      const listaPovoados = Object.entries(porPovoado).map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`).join('') || '<p>Nenhum dado registrado.</p>';
-      const listaMelhorias = Object.entries(porMelhoria).map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`).join('') || '<p>Nenhum dado registrado.</p>';
+      const listaPovoados = Object.entries(porPovoado)
+        .map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`)
+        .join('') || '<p>Nenhum dado registrado.</p>';
+
+      const listaMelhorias = Object.entries(porMelhoria)
+        .map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`)
+        .join('') || '<p>Nenhum dado registrado.</p>';
 
       el.innerHTML = `
         <div class="registro">
@@ -644,10 +703,12 @@
           <p><strong>Masculino:</strong> ${dados.filter(d => d.sexo === 'Masculino').length}</p>
           <p><strong>Feminino:</strong> ${dados.filter(d => d.sexo === 'Feminino').length}</p>
         </div>
+
         <div class="registro">
           <h3>Cadastros por Povoado/Bairro</h3>
           ${listaPovoados}
         </div>
+
         <div class="registro">
           <h3>Principais Melhorias Solicitadas</h3>
           ${listaMelhorias}
@@ -656,11 +717,6 @@
     }
 
     async function sincronizarPendentes() {
-      if (!GOOGLE_SCRIPT_URL) {
-        alert('A URL do Google Apps Script ainda não foi configurada no código.');
-        return;
-      }
-
       const dados = obterDados();
       const pendentes = dados.filter(d => !d.sincronizadoGoogle);
 
@@ -673,26 +729,48 @@
         await enviarParaGoogleSheets(cadastro);
       }
 
-      alert('Sincronização concluída.');
+      alert('Sincronização concluída. Confira a planilha.');
+      listarRegistros();
     }
 
     function exportarCSV() {
       const dados = obterDados();
+
       if (dados.length === 0) {
         alert('Não existem dados para exportar.');
         return;
       }
 
       const cabecalho = [
-        'Data/Hora', 'Nome completo', 'Idade', 'Sexo', 'Profissão', 'Município',
-        'Povoado/Bairro/Comunidade', 'Telefone', 'Entrevistador', 'Melhorias',
-        'Descrição', 'Observações', 'Atualizado em'
+        'Data/Hora',
+        'Nome completo',
+        'Idade',
+        'Sexo',
+        'Profissão',
+        'Município',
+        'Povoado/Bairro/Comunidade',
+        'Telefone',
+        'Entrevistador',
+        'Melhorias',
+        'Descrição',
+        'Observações',
+        'Atualizado em'
       ];
 
       const linhas = dados.map(d => [
-        d.dataHora, d.nome, d.idade, d.sexo, d.profissao, d.municipio,
-        d.povoado, d.telefone, d.entrevistador, d.melhorias,
-        d.descricao, d.observacoes, d.atualizadoEm
+        d.dataHora,
+        d.nome,
+        d.idade,
+        d.sexo,
+        d.profissao,
+        d.municipio,
+        d.povoado,
+        d.telefone,
+        d.entrevistador,
+        d.melhorias,
+        d.descricao,
+        d.observacoes,
+        d.atualizadoEm
       ]);
 
       const csv = [cabecalho, ...linhas]
@@ -701,10 +779,12 @@
 
       const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
+
       const a = document.createElement('a');
       a.href = url;
       a.download = 'censo_municipal.csv';
       a.click();
+
       URL.revokeObjectURL(url);
     }
 
@@ -715,16 +795,20 @@
 
     function apagarTudo() {
       if (!confirm('Atenção: isso apagará todos os cadastros deste aparelho. Deseja continuar?')) return;
+
       localStorage.removeItem(STORAGE_KEY);
+
       atualizarPainel();
       listarRegistros();
       atualizarResumo();
-      alert('Todos os dados foram apagados.');
+
+      alert('Todos os dados foram apagados deste aparelho.');
     }
 
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
         const abaCadastroAtiva = document.getElementById('cadastro').classList.contains('active');
+
         if (abaCadastroAtiva) {
           e.preventDefault();
           document.getElementById('formCenso').requestSubmit();
