@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App Censo Municipal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #eef3f9;
+      color: #1f2937;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f4c81, #1976d2);
+      color: white;
+      padding: 22px 16px;
+      text-align: center;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    }
+
+    header h1 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 18px auto;
+      padding: 0 14px 30px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: white;
+      padding: 14px;
+      border-radius: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .card strong {
+      display: block;
+      font-size: 24px;
+      color: #0f4c81;
+    }
+
+    .card span {
+      font-size: 13px;
+      color: #555;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+    }
+
+    .tabs button {
+      border: none;
+      background: white;
+      color: #0f4c81;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      white-space: nowrap;
+    }
+
+    .tabs button.active {
+      background: #0f4c81;
+      color: white;
+    }
+
+    section {
+      display: none;
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    section.active {
+      display: block;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 14px;
+      color: #0f4c81;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cfd8e3;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      background: #f9fbfd;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 9px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .check-item input {
+      width: auto;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    button.main {
+      flex: 1;
+      min-width: 150px;
+      border: none;
+      background: #0f4c81;
+      color: white;
+      padding: 13px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      flex: 1;
+      min-width: 150px;
+      border: none;
+      background: #e5e7eb;
+      color: #1f2937;
+      padding: 13px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .search-box {
+      margin-bottom: 14px;
+    }
+
+    .registro {
+      background: #f8fafc;
+      border: 1px solid #dbe4ee;
+      padding: 14px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+
+    .registro h3 {
+      font-size: 17px;
+      color: #0f4c81;
+      margin-bottom: 6px;
+    }
+
+    .registro p {
+      font-size: 14px;
+      margin: 4px 0;
+    }
+
+    .registro .acoes {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .registro .acoes button {
+      border: none;
+      padding: 9px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .edit-btn {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .delete-btn {
+      background: #dc2626;
+      color: white;
+    }
+
+    .empty {
+      text-align: center;
+      color: #666;
+      padding: 20px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #667085;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 700px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 19px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>App Censo Municipal</h1>
+    <p>Cadastro social e levantamento das necessidades da comunidade</p>
+  </header>
+
+  <div class="container">
+    <div class="cards">
+      <div class="card">
+        <strong id="totalCadastros">0</strong>
+        <span>Total de cadastros</span>
+      </div>
+      <div class="card">
+        <strong id="totalMasculino">0</strong>
+        <span>Masculino</span>
+      </div>
+      <div class="card">
+        <strong id="totalFeminino">0</strong>
+        <span>Feminino</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="active" onclick="abrirAba('cadastro', this)">Novo Cadastro</button>
+      <button onclick="abrirAba('registros', this)">Registros</button>
+      <button onclick="abrirAba('relatorios', this)">Relatórios</button>
+    </div>
+
+    <section id="cadastro" class="active">
+      <h2>Cadastro do Morador</h2>
+
+      <form id="formCenso">
+        <input type="hidden" id="editIndex" value="" />
+
+        <label>Nome completo *</label>
+        <input type="text" id="nome" required placeholder="Digite o nome completo" />
+
+        <label>Idade *</label>
+        <input type="number" id="idade" required min="0" max="120" placeholder="Digite a idade" />
+
+        <label>Sexo *</label>
+        <select id="sexo" required>
+          <option value="">Selecione</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Outro">Outro</option>
+          <option value="Prefere não informar">Prefere não informar</option>
+        </select>
+
+        <label>Profissão *</label>
+        <input type="text" id="profissao" required placeholder="Ex: agricultor, estudante, servidor público" />
+
+        <label>Município *</label>
+        <input type="text" id="municipio" required placeholder="Digite o município" />
+
+        <label>Povoado/Bairro/Comunidade *</label>
+        <input type="text" id="povoado" required placeholder="Digite o povoado, bairro ou comunidade" />
+
+        <label>Telefone</label>
+        <input type="tel" id="telefone" placeholder="Digite o telefone" />
+
+        <label>Nome do entrevistador/recenseador *</label>
+        <input type="text" id="entrevistador" required placeholder="Digite o nome do entrevistador" />
+
+        <label>O que precisa melhorar onde mora? *</label>
+        <div class="checkbox-grid">
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Saúde" /> Saúde</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Educação" /> Educação</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Segurança" /> Segurança</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Transporte" /> Transporte</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Estradas" /> Estradas</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Água" /> Água</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Iluminação pública" /> Iluminação pública</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Limpeza urbana" /> Limpeza urbana</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Emprego" /> Emprego</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Assistência social" /> Assistência social</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Internet" /> Internet</label>
+          <label class="check-item"><input type="checkbox" name="melhorias" value="Esporte e lazer" /> Esporte e lazer</label>
+        </div>
+
+        <label>Outra melhoria</label>
+        <input type="text" id="outraMelhoria" placeholder="Caso não esteja na lista, descreva aqui" />
+
+        <label>Descreva melhor a principal necessidade da comunidade *</label>
+        <textarea id="descricao" required placeholder="Descreva com detalhes a necessidade informada"></textarea>
+
+        <label>Observações adicionais</label>
+        <textarea id="observacoes" placeholder="Campo opcional"></textarea>
+
+        <div class="btn-row">
+          <button type="submit" class="main" id="btnSalvar">Salvar Cadastro</button>
+          <button type="button" class="secondary" onclick="limparFormulario()">Limpar</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="registros">
+      <h2>Registros do Censo</h2>
+      <input class="search-box" type="text" id="pesquisa" placeholder="Pesquisar por nome, município, povoado, profissão ou entrevistador" oninput="listarRegistros()" />
+      <div id="listaRegistros"></div>
+    </section>
+
+    <section id="relatorios">
+      <h2>Relatórios e Exportação</h2>
+      <p>Os dados ficam salvos neste aparelho pelo navegador e também podem ser enviados para uma Planilha Google no Drive quando a URL do Google Apps Script estiver configurada.</p>
+
+      <div class="btn-row">
+        <button class="main" onclick="exportarCSV()">Exportar Excel/CSV</button>
+        <button class="main" onclick="sincronizarPendentes()">Enviar Pendentes ao Google Drive</button>
+        <button class="secondary" onclick="imprimirRelatorio()">Imprimir/PDF</button>
+        <button class="secondary danger" onclick="apagarTudo()">Apagar Todos os Dados</button>
+      </div>
+
+      <div id="resumoRelatorio" style="margin-top: 18px;"></div>
+    </section>
+
+    <footer>
+      Sistema de Censo Municipal - Dados com data e hora automáticas
+    </footer>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'censo_municipal_dados_v1';
+    
+    /*
+      PARA SALVAR NO GOOGLE DRIVE:
+      1. Crie uma Planilha Google no seu Drive.
+      2. Vá em Extensões > Apps Script.
+      3. Cole o código Apps Script que vou te mandar no chat.
+      4. Publique como Web App.
+      5. Copie a URL gerada e cole abaixo, entre as aspas.
+    */
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcRWYSBxmLyTBWSk92OSZoC_PsNSrQF-zgV7YrcOR0AXmX1SFTX8rbg-YTTSgQFkw/exec'; // URL DO WEB APP DO GOOGLE APPS SCRIPT
+
+    function obterDados() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }
+
+    function salvarDados(dados) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+    }
+
+    function abrirAba(id, botao) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      botao.classList.add('active');
+      listarRegistros();
+      atualizarResumo();
+    }
+
+    function formatarDataHora() {
+      const agora = new Date();
+      return agora.toLocaleString('pt-BR');
+    }
+
+    function pegarMelhoriasSelecionadas() {
+      const checks = Array.from(document.querySelectorAll('input[name="melhorias"]:checked')).map(c => c.value);
+      const outra = document.getElementById('outraMelhoria').value.trim();
+      if (outra) checks.push(outra);
+      return checks;
+    }
+
+    document.getElementById('formCenso').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const melhorias = pegarMelhoriasSelecionadas();
+      if (melhorias.length === 0) {
+        alert('Selecione pelo menos uma melhoria necessária.');
+        return;
+      }
+
+      const dados = obterDados();
+      const editIndex = document.getElementById('editIndex').value;
+
+      const cadastro = {
+        nome: document.getElementById('nome').value.trim(),
+        idade: document.getElementById('idade').value.trim(),
+        sexo: document.getElementById('sexo').value,
+        profissao: document.getElementById('profissao').value.trim(),
+        municipio: document.getElementById('municipio').value.trim(),
+        povoado: document.getElementById('povoado').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        entrevistador: document.getElementById('entrevistador').value.trim(),
+        melhorias: melhorias.join(', '),
+        descricao: document.getElementById('descricao').value.trim(),
+        observacoes: document.getElementById('observacoes').value.trim(),
+        dataHora: editIndex === '' ? formatarDataHora() : dados[editIndex].dataHora,
+        atualizadoEm: editIndex === '' ? '' : formatarDataHora(),
+        sincronizadoGoogle: false
+      };
+
+      if (editIndex === '') {
+        dados.push(cadastro);
+      } else {
+        dados[editIndex] = cadastro;
+      }
+
+      salvarDados(dados);
+      atualizarPainel();
+      listarRegistros();
+      atualizarResumo();
+
+      const enviado = await enviarParaGoogleSheets(cadastro);
+
+      if (enviado) {
+        alert(editIndex === '' ? 'Cadastro salvo no celular e enviado ao Google Drive com sucesso!' : 'Cadastro atualizado e enviado ao Google Drive com sucesso!');
+      } else {
+        alert('Cadastro salvo no celular, mas não foi possível confirmar o envio ao Google Drive. Use o botão "Enviar Pendentes ao Google Drive" quando estiver com internet.');
+      }
+
+      limparFormulario();
+      atualizarPainel();
+      listarRegistros();
+      atualizarResumo();
+    });
+
+    async function enviarParaGoogleSheets(cadastro) {
+      if (!GOOGLE_SCRIPT_URL) {
+        console.log('Google Script URL não configurada. Cadastro salvo apenas localmente.');
+        return false;
+      }
+
+      return new Promise((resolve) => {
+        try {
+          const iframeName = 'iframeGoogleDrive_' + Date.now();
+          const iframe = document.createElement('iframe');
+          iframe.name = iframeName;
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = GOOGLE_SCRIPT_URL;
+          form.target = iframeName;
+          form.style.display = 'none';
+
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'dados';
+          input.value = JSON.stringify(cadastro);
+          form.appendChild(input);
+
+          document.body.appendChild(form);
+          form.submit();
+
+          setTimeout(() => {
+            const dados = obterDados();
+            const index = dados.findIndex(d =>
+              d.nome === cadastro.nome &&
+              d.dataHora === cadastro.dataHora &&
+              d.telefone === cadastro.telefone
+            );
+
+            if (index !== -1) {
+              dados[index].sincronizadoGoogle = true;
+              salvarDados(dados);
+            }
+
+            form.remove();
+            iframe.remove();
+            resolve(true);
+          }, 1800);
+        } catch (erro) {
+          console.error(erro);
+          resolve(false);
+        }
+      });
+    }
+
+    function limparFormulario() {
+      document.getElementById('formCenso').reset();
+      document.getElementById('editIndex').value = '';
+      document.getElementById('btnSalvar').textContent = 'Salvar Cadastro';
+    }
+
+    function atualizarPainel() {
+      const dados = obterDados();
+      document.getElementById('totalCadastros').textContent = dados.length;
+      document.getElementById('totalMasculino').textContent = dados.filter(d => d.sexo === 'Masculino').length;
+      document.getElementById('totalFeminino').textContent = dados.filter(d => d.sexo === 'Feminino').length;
+    }
+
+    function listarRegistros() {
+      const lista = document.getElementById('listaRegistros');
+      if (!lista) return;
+
+      const termo = (document.getElementById('pesquisa')?.value || '').toLowerCase();
+      const dados = obterDados();
+
+      const filtrados = dados.filter(d =>
+        d.nome.toLowerCase().includes(termo) ||
+        d.municipio.toLowerCase().includes(termo) ||
+        d.povoado.toLowerCase().includes(termo) ||
+        d.profissao.toLowerCase().includes(termo) ||
+        d.entrevistador.toLowerCase().includes(termo)
+      );
+
+      if (filtrados.length === 0) {
+        lista.innerHTML = '<div class="empty">Nenhum cadastro encontrado.</div>';
+        return;
+      }
+
+      lista.innerHTML = filtrados.map((d, i) => {
+        const indexReal = dados.indexOf(d);
+        return `
+          <div class="registro">
+            <h3>${d.nome}</h3>
+            <p><strong>Idade:</strong> ${d.idade}</p>
+            <p><strong>Sexo:</strong> ${d.sexo}</p>
+            <p><strong>Profissão:</strong> ${d.profissao}</p>
+            <p><strong>Município:</strong> ${d.municipio}</p>
+            <p><strong>Povoado/Bairro:</strong> ${d.povoado}</p>
+            <p><strong>Telefone:</strong> ${d.telefone || 'Não informado'}</p>
+            <p><strong>Melhorias:</strong> ${d.melhorias}</p>
+            <p><strong>Descrição:</strong> ${d.descricao}</p>
+            <p><strong>Entrevistador:</strong> ${d.entrevistador}</p>
+            <p><strong>Data/Hora:</strong> ${d.dataHora}</p>
+            <p><strong>Sincronização Google Drive:</strong> ${d.sincronizadoGoogle ? 'Enviado' : 'Pendente/Local'}</p>
+            ${d.atualizadoEm ? `<p><strong>Atualizado em:</strong> ${d.atualizadoEm}</p>` : ''}
+            <div class="acoes">
+              <button class="edit-btn" onclick="editarRegistro(${indexReal})">Editar</button>
+              <button class="delete-btn" onclick="excluirRegistro(${indexReal})">Excluir</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function editarRegistro(index) {
+      const dados = obterDados();
+      const d = dados[index];
+
+      document.getElementById('editIndex').value = index;
+      document.getElementById('nome').value = d.nome;
+      document.getElementById('idade').value = d.idade;
+      document.getElementById('sexo').value = d.sexo;
+      document.getElementById('profissao').value = d.profissao;
+      document.getElementById('municipio').value = d.municipio;
+      document.getElementById('povoado').value = d.povoado;
+      document.getElementById('telefone').value = d.telefone;
+      document.getElementById('entrevistador').value = d.entrevistador;
+      document.getElementById('descricao').value = d.descricao;
+      document.getElementById('observacoes').value = d.observacoes;
+
+      document.querySelectorAll('input[name="melhorias"]').forEach(c => c.checked = false);
+      const melhorias = d.melhorias.split(',').map(m => m.trim());
+      document.querySelectorAll('input[name="melhorias"]').forEach(c => {
+        if (melhorias.includes(c.value)) c.checked = true;
+      });
+
+      document.getElementById('btnSalvar').textContent = 'Atualizar Cadastro';
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById('cadastro').classList.add('active');
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.tabs button').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function excluirRegistro(index) {
+      if (!confirm('Deseja realmente excluir este cadastro?')) return;
+      const dados = obterDados();
+      dados.splice(index, 1);
+      salvarDados(dados);
+      atualizarPainel();
+      listarRegistros();
+      atualizarResumo();
+    }
+
+    function atualizarResumo() {
+      const el = document.getElementById('resumoRelatorio');
+      if (!el) return;
+
+      const dados = obterDados();
+      const porPovoado = {};
+      const porMelhoria = {};
+
+      dados.forEach(d => {
+        porPovoado[d.povoado] = (porPovoado[d.povoado] || 0) + 1;
+        d.melhorias.split(',').map(m => m.trim()).forEach(m => {
+          porMelhoria[m] = (porMelhoria[m] || 0) + 1;
+        });
+      });
+
+      const listaPovoados = Object.entries(porPovoado).map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`).join('') || '<p>Nenhum dado registrado.</p>';
+      const listaMelhorias = Object.entries(porMelhoria).map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`).join('') || '<p>Nenhum dado registrado.</p>';
+
+      el.innerHTML = `
+        <div class="registro">
+          <h3>Resumo Geral</h3>
+          <p><strong>Total de cadastros:</strong> ${dados.length}</p>
+          <p><strong>Masculino:</strong> ${dados.filter(d => d.sexo === 'Masculino').length}</p>
+          <p><strong>Feminino:</strong> ${dados.filter(d => d.sexo === 'Feminino').length}</p>
+        </div>
+        <div class="registro">
+          <h3>Cadastros por Povoado/Bairro</h3>
+          ${listaPovoados}
+        </div>
+        <div class="registro">
+          <h3>Principais Melhorias Solicitadas</h3>
+          ${listaMelhorias}
+        </div>
+      `;
+    }
+
+    async function sincronizarPendentes() {
+      if (!GOOGLE_SCRIPT_URL) {
+        alert('A URL do Google Apps Script ainda não foi configurada no código.');
+        return;
+      }
+
+      const dados = obterDados();
+      const pendentes = dados.filter(d => !d.sincronizadoGoogle);
+
+      if (pendentes.length === 0) {
+        alert('Não há cadastros pendentes para sincronizar.');
+        return;
+      }
+
+      for (const cadastro of pendentes) {
+        await enviarParaGoogleSheets(cadastro);
+      }
+
+      alert('Sincronização concluída.');
+    }
+
+    function exportarCSV() {
+      const dados = obterDados();
+      if (dados.length === 0) {
+        alert('Não existem dados para exportar.');
+        return;
+      }
+
+      const cabecalho = [
+        'Data/Hora', 'Nome completo', 'Idade', 'Sexo', 'Profissão', 'Município',
+        'Povoado/Bairro/Comunidade', 'Telefone', 'Entrevistador', 'Melhorias',
+        'Descrição', 'Observações', 'Atualizado em'
+      ];
+
+      const linhas = dados.map(d => [
+        d.dataHora, d.nome, d.idade, d.sexo, d.profissao, d.municipio,
+        d.povoado, d.telefone, d.entrevistador, d.melhorias,
+        d.descricao, d.observacoes, d.atualizadoEm
+      ]);
+
+      const csv = [cabecalho, ...linhas]
+        .map(linha => linha.map(campo => `"${String(campo || '').replace(/"/g, '""')}"`).join(';'))
+        .join('\n');
+
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'censo_municipal.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function imprimirRelatorio() {
+      atualizarResumo();
+      window.print();
+    }
+
+    function apagarTudo() {
+      if (!confirm('Atenção: isso apagará todos os cadastros deste aparelho. Deseja continuar?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      atualizarPainel();
+      listarRegistros();
+      atualizarResumo();
+      alert('Todos os dados foram apagados.');
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        const abaCadastroAtiva = document.getElementById('cadastro').classList.contains('active');
+        if (abaCadastroAtiva) {
+          e.preventDefault();
+          document.getElementById('formCenso').requestSubmit();
+        }
+      }
+    });
+
+    atualizarPainel();
+    listarRegistros();
+    atualizarResumo();
+  </script>
+</body>
+</html>
