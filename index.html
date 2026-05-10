@@ -494,6 +494,7 @@
       return new Promise((resolve) => {
         try {
           const params = new URLSearchParams();
+          params.append('acao', 'salvar');
           params.append('dataHora', cadastro.dataHora || '');
           params.append('nome', cadastro.nome || '');
           params.append('idade', cadastro.idade || '');
@@ -507,16 +508,19 @@
           params.append('descricao', cadastro.descricao || '');
           params.append('observacoes', cadastro.observacoes || '');
           params.append('atualizadoEm', cadastro.atualizadoEm || '');
-          params.append('acao', 'salvar');
 
-          const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
+          const url = GOOGLE_SCRIPT_URL + '?' + params.toString() + '&cache=' + Date.now();
 
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          iframe.src = url;
-          document.body.appendChild(iframe);
+          const img = new Image();
+          img.style.display = 'none';
+          img.referrerPolicy = 'no-referrer';
 
-          setTimeout(() => {
+          let finalizado = false;
+
+          const concluir = () => {
+            if (finalizado) return;
+            finalizado = true;
+
             const dados = obterDados();
             const index = dados.findIndex(d =>
               d.nome === cadastro.nome &&
@@ -529,9 +533,17 @@
               salvarDados(dados);
             }
 
-            iframe.remove();
+            setTimeout(() => img.remove(), 1000);
             resolve(true);
-          }, 2500);
+          };
+
+          img.onload = concluir;
+          img.onerror = concluir;
+
+          document.body.appendChild(img);
+          img.src = url;
+
+          setTimeout(concluir, 3500);
         } catch (erro) {
           console.error('Erro ao enviar para Google Drive:', erro);
           resolve(false);
