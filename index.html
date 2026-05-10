@@ -491,64 +491,49 @@
         return false;
       }
 
-      return new Promise((resolve) => {
-        try {
-          const params = new URLSearchParams();
-          params.append('acao', 'salvar');
-          params.append('dataHora', cadastro.dataHora || '');
-          params.append('nome', cadastro.nome || '');
-          params.append('idade', cadastro.idade || '');
-          params.append('sexo', cadastro.sexo || '');
-          params.append('profissao', cadastro.profissao || '');
-          params.append('municipio', cadastro.municipio || '');
-          params.append('povoado', cadastro.povoado || '');
-          params.append('telefone', cadastro.telefone || '');
-          params.append('entrevistador', cadastro.entrevistador || '');
-          params.append('melhorias', cadastro.melhorias || '');
-          params.append('descricao', cadastro.descricao || '');
-          params.append('observacoes', cadastro.observacoes || '');
-          params.append('atualizadoEm', cadastro.atualizadoEm || '');
+      try {
+        const params = new URLSearchParams();
+        params.append('acao', 'salvar');
+        params.append('dataHora', cadastro.dataHora || '');
+        params.append('nome', cadastro.nome || '');
+        params.append('idade', cadastro.idade || '');
+        params.append('sexo', cadastro.sexo || '');
+        params.append('profissao', cadastro.profissao || '');
+        params.append('municipio', cadastro.municipio || '');
+        params.append('povoado', cadastro.povoado || '');
+        params.append('telefone', cadastro.telefone || '');
+        params.append('entrevistador', cadastro.entrevistador || '');
+        params.append('melhorias', cadastro.melhorias || '');
+        params.append('descricao', cadastro.descricao || '');
+        params.append('observacoes', cadastro.observacoes || '');
+        params.append('atualizadoEm', cadastro.atualizadoEm || '');
+        params.append('cache', Date.now().toString());
 
-          const url = GOOGLE_SCRIPT_URL + '?' + params.toString() + '&cache=' + Date.now();
+        const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
 
-          const img = new Image();
-          img.style.display = 'none';
-          img.referrerPolicy = 'no-referrer';
+        await fetch(url, {
+          method: 'GET',
+          mode: 'no-cors',
+          cache: 'no-store'
+        });
 
-          let finalizado = false;
+        const dados = obterDados();
+        const index = dados.findIndex(d =>
+          d.nome === cadastro.nome &&
+          d.dataHora === cadastro.dataHora &&
+          d.telefone === cadastro.telefone
+        );
 
-          const concluir = () => {
-            if (finalizado) return;
-            finalizado = true;
-
-            const dados = obterDados();
-            const index = dados.findIndex(d =>
-              d.nome === cadastro.nome &&
-              d.dataHora === cadastro.dataHora &&
-              d.telefone === cadastro.telefone
-            );
-
-            if (index !== -1) {
-              dados[index].sincronizadoGoogle = true;
-              salvarDados(dados);
-            }
-
-            setTimeout(() => img.remove(), 1000);
-            resolve(true);
-          };
-
-          img.onload = concluir;
-          img.onerror = concluir;
-
-          document.body.appendChild(img);
-          img.src = url;
-
-          setTimeout(concluir, 3500);
-        } catch (erro) {
-          console.error('Erro ao enviar para Google Drive:', erro);
-          resolve(false);
+        if (index !== -1) {
+          dados[index].sincronizadoGoogle = true;
+          salvarDados(dados);
         }
-      });
+
+        return true;
+      } catch (erro) {
+        console.error('Erro ao enviar para Google Drive:', erro);
+        return false;
+      }
     }
 
     function limparFormulario() {
@@ -769,3 +754,4 @@
   </script>
 </body>
 </html>
+
