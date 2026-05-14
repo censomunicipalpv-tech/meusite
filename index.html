@@ -2,360 +2,300 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>App Censo Municipal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>App Censo Pedra Vermelha</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      background: #eef3f9;
-      color: #1f2937;
-    }
-
-    header {
-      background: linear-gradient(135deg, #0f4c81, #1976d2);
-      color: white;
-      padding: 22px 16px;
-      text-align: center;
-      border-bottom-left-radius: 24px;
-      border-bottom-right-radius: 24px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-    }
-
-    header h1 {
-      font-size: 22px;
-      margin-bottom: 6px;
-    }
-
-    header p {
-      font-size: 14px;
-      opacity: 0.95;
-    }
-
-    .container {
-      max-width: 920px;
-      margin: 18px auto;
-      padding: 0 14px 30px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .card {
-      background: white;
-      padding: 14px;
-      border-radius: 16px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-
-    .card strong {
-      display: block;
-      font-size: 24px;
-      color: #0f4c81;
-    }
-
-    .card span {
-      font-size: 13px;
-      color: #555;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-      overflow-x: auto;
-    }
-
-    .tabs button {
-      border: none;
-      background: white;
-      color: #0f4c81;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      white-space: nowrap;
-    }
-
-    .tabs button.active {
-      background: #0f4c81;
-      color: white;
-    }
-
-    section {
-      display: none;
-      background: white;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    section.active {
-      display: block;
-    }
-
-    h2 {
-      font-size: 20px;
-      margin-bottom: 14px;
-      color: #0f4c81;
-    }
-
-    label {
-      display: block;
-      margin-top: 12px;
-      margin-bottom: 5px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cfd8e3;
-      border-radius: 12px;
-      font-size: 15px;
-      outline: none;
-      background: #f9fbfd;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    .checkbox-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .check-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #f1f5f9;
-      padding: 9px;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-
-    .check-item input {
-      width: auto;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
-
-    button.main {
-      flex: 1;
-      min-width: 150px;
-      border: none;
-      background: #0f4c81;
-      color: white;
-      padding: 13px;
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button.secondary {
-      flex: 1;
-      min-width: 150px;
-      border: none;
-      background: #e5e7eb;
-      color: #1f2937;
-      padding: 13px;
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button.danger {
-      background: #dc2626;
-      color: white;
-    }
-
-    .search-box {
-      margin-bottom: 14px;
-    }
-
-    .registro {
-      background: #f8fafc;
-      border: 1px solid #dbe4ee;
-      padding: 14px;
-      border-radius: 14px;
-      margin-bottom: 10px;
-    }
-
-    .registro h3 {
-      font-size: 17px;
-      color: #0f4c81;
-      margin-bottom: 6px;
-    }
-
-    .registro p {
-      font-size: 14px;
-      margin: 4px 0;
-    }
-
-    .registro .acoes {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .registro .acoes button {
-      border: none;
-      padding: 9px 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .edit-btn {
-      background: #f59e0b;
-      color: white;
-    }
-
-    .delete-btn {
-      background: #dc2626;
-      color: white;
-    }
-
-    .empty {
-      text-align: center;
-      color: #666;
-      padding: 20px;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: #667085;
-      margin-top: 18px;
-    }
-
-    @media (max-width: 700px) {
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .checkbox-grid {
-        grid-template-columns: 1fr;
-      }
-
-      header h1 {
-        font-size: 19px;
-      }
-    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{background:#eef3f9;color:#1f2937}
+    .hidden{display:none!important}
+    header{background:linear-gradient(135deg,#0f4c81,#1976d2);color:#fff;padding:22px 16px;text-align:center;border-bottom-left-radius:24px;border-bottom-right-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    header h1{font-size:22px;margin-bottom:6px}
+    header p{font-size:14px;opacity:.95}
+    .container{max-width:1100px;margin:18px auto;padding:0 14px 30px}
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(135deg,#e8f1fb,#f8fbff)}
+    .login-card{width:100%;max-width:430px;background:#fff;border-radius:24px;padding:24px;box-shadow:0 12px 40px rgba(15,76,129,.18)}
+    .login-card h1{color:#0f4c81;font-size:24px;text-align:center;margin-bottom:8px}
+    .login-card p{text-align:center;color:#667085;font-size:14px;margin-bottom:18px}
+    label{display:block;margin-top:12px;margin-bottom:5px;font-weight:bold;font-size:14px}
+    input,select,textarea{width:100%;padding:12px;border:1px solid #cfd8e3;border-radius:12px;font-size:15px;outline:none;background:#f9fbfd}
+    textarea{min-height:88px;resize:vertical}
+    .btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+    button{border:none;border-radius:14px;padding:12px 14px;font-weight:bold;cursor:pointer}
+    button.main{background:#0f4c81;color:white;flex:1;min-width:150px}
+    button.secondary{background:#e5e7eb;color:#1f2937;flex:1;min-width:150px}
+    button.danger{background:#dc2626;color:#fff}
+    button.warn{background:#f59e0b;color:#fff}
+    button.small{padding:8px 10px;border-radius:10px;font-size:13px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0;flex-wrap:wrap}
+    .userbox{background:#fff;border-radius:14px;padding:10px 12px;box-shadow:0 2px 8px rgba(0,0,0,.08);font-size:14px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+    .card{background:#fff;padding:14px;border-radius:16px;box-shadow:0 3px 12px rgba(0,0,0,.08);text-align:center}
+    .card strong{display:block;font-size:24px;color:#0f4c81}
+    .card span{font-size:13px;color:#555}
+    .tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:3px}
+    .tabs button{background:#fff;color:#0f4c81;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}
+    .tabs button.active{background:#0f4c81;color:#fff}
+    section{display:none;background:#fff;border-radius:18px;padding:18px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+    section.active{display:block}
+    h2{font-size:20px;margin-bottom:14px;color:#0f4c81}
+    h3{font-size:17px;color:#0f4c81;margin:16px 0 8px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+    .check-item{display:flex;align-items:center;gap:8px;background:#f1f5f9;padding:9px;border-radius:10px;font-size:14px}
+    .check-item input{width:auto}
+    .registro{background:#f8fafc;border:1px solid #dbe4ee;padding:14px;border-radius:14px;margin-bottom:10px}
+    .registro h3{margin-top:0}
+    .registro p{font-size:14px;margin:4px 0}
+    .acoes{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .empty{text-align:center;color:#666;padding:20px}
+    .search-box{margin-bottom:14px}
+    table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff;border-radius:12px;overflow:hidden}
+    th,td{border:1px solid #dbe4ee;padding:9px;font-size:13px;text-align:left}
+    th{background:#f1f5f9;color:#0f4c81}
+    .family-row{display:grid;grid-template-columns:2fr 1fr .7fr 1.5fr 1.5fr 42px;gap:8px;margin-top:8px}
+    .notice{background:#ecfdf3;border:1px solid #bbf7d0;color:#166534;padding:10px;border-radius:12px;font-size:13px;margin:10px 0}
+    .error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:10px;border-radius:12px;font-size:13px;margin:10px 0}
+    footer{text-align:center;font-size:12px;color:#667085;margin-top:18px}
+    @media(max-width:800px){.cards,.grid-2,.grid-3,.checkbox-grid{grid-template-columns:1fr}.family-row{grid-template-columns:1fr}.family-row button{width:100%}header h1{font-size:19px}}
   </style>
 </head>
 <body>
+
+<div id="loginScreen" class="login-wrap">
+  <div class="login-card">
+    <h1>Censo Pedra Vermelha</h1>
+    <p>Acesso restrito para recenseadores e administrador</p>
+    <div id="loginMsg"></div>
+    <form id="loginForm">
+      <label>Usuário</label>
+      <input id="loginUsuario" autocomplete="username" required placeholder="Digite o usuário">
+      <label>Senha</label>
+      <input id="loginSenha" type="password" autocomplete="current-password" required placeholder="Digite a senha">
+      <div class="btn-row">
+        <button type="submit" class="main">Entrar</button>
+      </div>
+    </form>
+    <div class="notice">
+      Acesso inicial: <strong>admin</strong> | Senha: <strong>admin123</strong>
+    </div>
+  </div>
+</div>
+
+<div id="appScreen" class="hidden">
   <header>
-    <h1>App Censo Municipal</h1>
-    <p>Cadastro social e levantamento das necessidades da comunidade</p>
+    <h1>App Censo Pedra Vermelha</h1>
+    <p>Formulários Domiciliar e Comerciante com controle de usuários</p>
   </header>
 
   <div class="container">
+    <div class="topbar">
+      <div class="userbox">
+        Logado como: <strong id="usuarioLogadoNome"></strong> —
+        Perfil: <strong id="usuarioLogadoPerfil"></strong>
+      </div>
+      <button class="danger small" onclick="sair()">Sair</button>
+    </div>
+
     <div class="cards">
-      <div class="card">
-        <strong id="totalCadastros">0</strong>
-        <span>Total de cadastros</span>
-      </div>
-      <div class="card">
-        <strong id="totalMasculino">0</strong>
-        <span>Masculino</span>
-      </div>
-      <div class="card">
-        <strong id="totalFeminino">0</strong>
-        <span>Feminino</span>
-      </div>
+      <div class="card"><strong id="totalCadastros">0</strong><span>Total</span></div>
+      <div class="card"><strong id="totalDomiciliar">0</strong><span>Domiciliar</span></div>
+      <div class="card"><strong id="totalComerciante">0</strong><span>Comerciante</span></div>
+      <div class="card"><strong id="totalUsuarios">0</strong><span>Usuários</span></div>
     </div>
 
     <div class="tabs">
       <button class="active" onclick="abrirAba('cadastro', this)">Novo Cadastro</button>
       <button onclick="abrirAba('registros', this)">Registros</button>
       <button onclick="abrirAba('relatorios', this)">Relatórios</button>
+      <button id="tabAdmin" onclick="abrirAba('admin', this)">Admin</button>
     </div>
 
     <section id="cadastro" class="active">
-      <h2>Cadastro do Morador</h2>
+      <h2>Novo Cadastro</h2>
+      <input type="hidden" id="editIndex" value="">
+      <label>Tipo de Formulário</label>
+      <select id="tipoFormulario" onchange="trocarFormulario()">
+        <option value="domiciliar">Censo Domiciliar</option>
+        <option value="comerciante">Censo Comerciante</option>
+      </select>
 
       <form id="formCenso">
-        <input type="hidden" id="editIndex" value="" />
+        <div id="formDomiciliar">
+          <h3>1. Identificação Pessoal</h3>
+          <div class="grid-2">
+            <div><label>Nome Completo *</label><input id="d_nome" required></div>
+            <div><label>Data de Nascimento</label><input id="d_nascimento" type="date"></div>
+            <div><label>Idade</label><input id="d_idade" type="number" min="0"></div>
+            <div><label>Sexo</label><select id="d_sexo"><option value="">Selecione</option><option>Masculino</option><option>Feminino</option><option>Outro</option><option>Prefere não informar</option></select></div>
+            <div><label>Estado Civil</label><input id="d_estadoCivil"></div>
+            <div><label>Telefone</label><input id="d_telefone"></div>
+            <div><label>Nome da Mãe</label><input id="d_mae"></div>
+            <div><label>Naturalidade</label><input id="d_naturalidade"></div>
+          </div>
 
-        <label>Nome completo *</label>
-        <input type="text" id="nome" required placeholder="Digite o nome completo" />
+          <h3>2. Endereço e Localização</h3>
+          <div class="grid-2">
+            <div><label>Bairro/Comunidade/Povoado</label><input id="d_povoado" value="Pedra Vermelha"></div>
+            <div><label>Rua/Avenida</label><input id="d_rua"></div>
+            <div><label>Número</label><input id="d_numero"></div>
+            <div><label>Ponto de Referência</label><input id="d_referencia"></div>
+            <div><label>CEP</label><input id="d_cep" value="48.805-899"></div>
+          </div>
 
-        <label>Idade *</label>
-        <input type="number" id="idade" required min="0" max="120" placeholder="Digite a idade" />
+          <h3>3. Composição Familiar</h3>
+          <div id="familiaLista"></div>
+          <button type="button" class="secondary small" onclick="addFamilia()">+ Adicionar Familiar</button>
 
-        <label>Sexo *</label>
-        <select id="sexo" required>
-          <option value="">Selecione</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Feminino">Feminino</option>
-          <option value="Outro">Outro</option>
-          <option value="Prefere não informar">Prefere não informar</option>
-        </select>
+          <h3>4. Condições de Moradia</h3>
+          <div class="grid-2">
+            <div><label>Situação da Casa</label><select id="d_situacaoCasa"><option></option><option>Própria</option><option>Alugada</option><option>Cedida</option><option>Financiada</option></select></div>
+            <div><label>Tipo de Construção</label><select id="d_construcao"><option></option><option>Alvenaria</option><option>Madeira</option><option>Taipa</option><option>Outra</option></select></div>
+            <div><label>Quantidade de Cômodos</label><input id="d_comodos" type="number"></div>
+            <div><label>Quantidade de Banheiros</label><input id="d_banheiros" type="number"></div>
+          </div>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" id="d_agua"> Água Encanada</label>
+            <label class="check-item"><input type="checkbox" id="d_energia"> Energia Elétrica</label>
+            <label class="check-item"><input type="checkbox" id="d_lixo"> Coleta de Lixo</label>
+            <label class="check-item"><input type="checkbox" id="d_internet"> Internet</label>
+            <label class="check-item"><input type="checkbox" id="d_saneamento"> Saneamento Básico</label>
+          </div>
+          <label>Se possui saneamento, qual?</label><input id="d_saneamentoQual">
 
-        <label>Profissão *</label>
-        <input type="text" id="profissao" required placeholder="Ex: agricultor, estudante, servidor público" />
+          <h3>5. Trabalho e Renda</h3>
+          <div class="grid-2">
+            <div><label>Responsável Financeiro</label><input id="d_respFinanceiro"></div>
+            <div><label>Profissão</label><input id="d_profissao"></div>
+            <div><label>Situação de Trabalho</label><select id="d_trabalho"><option></option><option>Empregado</option><option>Desempregado</option><option>Autônomo</option><option>Aposentado</option></select></div>
+            <div><label>Local de Trabalho</label><input id="d_localTrabalho"></div>
+            <div><label>Renda Familiar Mensal</label><input id="d_renda"></div>
+          </div>
+          <label>Benefícios Sociais</label>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" name="d_beneficios" value="Bolsa Família"> Bolsa Família</label>
+            <label class="check-item"><input type="checkbox" name="d_beneficios" value="BPC"> BPC</label>
+            <label class="check-item"><input type="checkbox" name="d_beneficios" value="Auxílio Gás"> Auxílio Gás</label>
+            <label class="check-item"><input type="checkbox" name="d_beneficios" value="Outros"> Outros</label>
+          </div>
+          <label>Outros benefícios</label><input id="d_beneficiosOutros">
 
-        <label>Município *</label>
-        <input type="text" id="municipio" required placeholder="Digite o município" />
+          <h3>6. Saúde</h3>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" id="d_deficiencia"> Pessoa com Deficiência na Família</label>
+            <label class="check-item"><input type="checkbox" id="d_doencaCronica"> Pessoa com Doença Crônica</label>
+            <label class="check-item"><input type="checkbox" id="d_acompanhamento"> Necessita Acompanhamento Médico</label>
+          </div>
+          <label>Qual doença/deficiência?</label><input id="d_doencaQual">
+          <label>Unidade de Saúde Utilizada</label><input id="d_unidadeSaude">
 
-        <label>Povoado/Bairro/Comunidade *</label>
-        <input type="text" id="povoado" required placeholder="Digite o povoado, bairro ou comunidade" />
+          <h3>7. Educação</h3>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" id="d_escola"> Crianças/adolescentes frequentam escola</label>
+            <label class="check-item"><input type="checkbox" id="d_evasao"> Existe evasão escolar</label>
+          </div>
+          <label>Nome da Escola</label><input id="d_nomeEscola">
+          <label>Maior nível de escolaridade da família</label><input id="d_escolaridadeFamilia">
 
-        <label>Telefone</label>
-        <input type="tel" id="telefone" placeholder="Digite o telefone" />
+          <h3>8. Observações Gerais</h3>
+          <textarea id="d_observacoes"></textarea>
 
-        <label>Nome do entrevistador/recenseador *</label>
-        <input type="text" id="entrevistador" required placeholder="Digite o nome do entrevistador" />
-
-        <label>O que precisa melhorar onde mora? *</label>
-        <div class="checkbox-grid">
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Saúde" /> Saúde</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Educação" /> Educação</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Segurança" /> Segurança</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Transporte" /> Transporte</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Estradas" /> Estradas</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Água" /> Água</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Iluminação pública" /> Iluminação pública</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Limpeza urbana" /> Limpeza urbana</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Emprego" /> Emprego</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Assistência social" /> Assistência social</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Internet" /> Internet</label>
-          <label class="check-item"><input type="checkbox" name="melhorias" value="Esporte e lazer" /> Esporte e lazer</label>
+          <h3>9. Dados do Entrevistador</h3>
+          <div class="grid-2">
+            <div><label>Nome do Entrevistador(a)</label><input id="d_entrevistador"></div>
+            <div><label>Data da Entrevista</label><input id="d_dataEntrevista" type="date"></div>
+          </div>
         </div>
 
-        <label>Outra melhoria</label>
-        <input type="text" id="outraMelhoria" placeholder="Caso não esteja na lista, descreva aqui" />
+        <div id="formComerciante" class="hidden">
+          <h3>1. Identificação do Responsável</h3>
+          <div class="grid-2">
+            <div><label>Nome do Responsável *</label><input id="c_nome"></div>
+            <div><label>Data de Nascimento</label><input id="c_nascimento" type="date"></div>
+            <div><label>Idade</label><input id="c_idade" type="number"></div>
+            <div><label>Sexo</label><select id="c_sexo"><option></option><option>Masculino</option><option>Feminino</option><option>Outro</option><option>Prefere não informar</option></select></div>
+            <div><label>Estado Civil</label><input id="c_estadoCivil"></div>
+            <div><label>Telefone/WhatsApp</label><input id="c_telefone"></div>
+            <div><label>E-mail</label><input id="c_email" type="email"></div>
+          </div>
 
-        <label>Descreva melhor a principal necessidade da comunidade *</label>
-        <textarea id="descricao" required placeholder="Descreva com detalhes a necessidade informada"></textarea>
+          <h3>2. Dados do Comércio</h3>
+          <div class="grid-2">
+            <div><label>Nome do Comércio</label><input id="c_comercio"></div>
+            <div><label>Tipo de Comércio</label><input id="c_tipoComercio"></div>
+            <div><label>Possui CNPJ?</label><select id="c_possuiCnpj"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>CNPJ</label><input id="c_cnpj"></div>
+            <div><label>Data de Fundação</label><input id="c_fundacao" type="date"></div>
+            <div><label>Cadastro Municipal?</label><select id="c_cadastroMunicipal"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>Endereço do Comércio</label><input id="c_endereco"></div>
+            <div><label>Bairro/Comunidade</label><input id="c_bairro"></div>
+            <div><label>Ponto de Referência</label><input id="c_referencia"></div>
+          </div>
 
-        <label>Observações adicionais</label>
-        <textarea id="observacoes" placeholder="Campo opcional"></textarea>
+          <h3>3. Funcionamento</h3>
+          <label>Dias de Funcionamento</label>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Segunda a sexta"> Segunda a sexta</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Todos os dias"> Todos os dias</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Segunda"> Segunda</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Terça"> Terça</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Quarta"> Quarta</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Quinta"> Quinta</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Sexta"> Sexta</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Sábado"> Sábado</label>
+            <label class="check-item"><input type="checkbox" name="c_dias" value="Domingo"> Domingo</label>
+          </div>
+          <div class="grid-2">
+            <div><label>Horário de Funcionamento</label><input id="c_horario"></div>
+            <div><label>Quantidade de Funcionários</label><input id="c_funcionarios" type="number"></div>
+            <div><label>Funcionários Registrados?</label><select id="c_funcionariosRegistrados"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>Tempo de Funcionamento</label><input id="c_tempo"></div>
+          </div>
+
+          <h3>4. Situação Financeira</h3>
+          <div class="grid-2">
+            <div><label>Principal Fonte de Renda</label><input id="c_fonteRenda"></div>
+            <div><label>Faixa de Renda Mensal</label><select id="c_faixaRenda"><option></option><option>Até 1 salário mínimo</option><option>De 1 a 2 salários mínimos</option><option>De 2 a 5 salários mínimos</option><option>Acima de 5 salários mínimos</option></select></div>
+            <div><label>Conta Bancária Empresarial?</label><select id="c_conta"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>Utiliza Máquina de Cartão?</label><select id="c_cartao"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>Possui Empréstimos/Financiamentos?</label><select id="c_emprestimo"><option></option><option>Sim</option><option>Não</option></select></div>
+          </div>
+
+          <h3>5. Estrutura do Comércio</h3>
+          <div class="grid-2">
+            <div><label>Tipo do Imóvel</label><select id="c_imovel"><option></option><option>Próprio</option><option>Alugado</option><option>Cedido</option></select></div>
+            <div><label>Condição da Estrutura</label><select id="c_condicao"><option></option><option>Boa</option><option>Regular</option><option>Precária</option></select></div>
+          </div>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" id="c_energia"> Energia Elétrica</label>
+            <label class="check-item"><input type="checkbox" id="c_agua"> Água Encanada</label>
+            <label class="check-item"><input type="checkbox" id="c_internet"> Internet</label>
+            <label class="check-item"><input type="checkbox" id="c_acessibilidade"> Acessibilidade</label>
+          </div>
+
+          <h3>6. Necessidades e Demandas</h3>
+          <label>Principais dificuldades</label>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Poucas vendas"> Poucas vendas</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Falta de clientes"> Falta de clientes</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Falta de crédito"> Falta de crédito</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Estrutura inadequada"> Estrutura inadequada</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Divulgação insuficiente"> Divulgação insuficiente</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Segurança"> Segurança</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Transporte"> Transporte</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Energia/Internet"> Energia/Internet</label>
+            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Impostos altos"> Impostos altos</label>
+          </div>
+          <label>Outras dificuldades</label><textarea id="c_dificuldadesOutras"></textarea>
+          <div class="grid-2">
+            <div><label>Necessita de apoio/incentivo?</label><select id="c_apoio"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>Qual apoio?</label><input id="c_apoioQual"></div>
+            <div><label>Interesse em cursos/capacitações?</label><select id="c_cursos"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>Área de interesse</label><input id="c_areaInteresse"></div>
+          </div>
+          <h3>7. Observações Gerais</h3>
+          <textarea id="c_observacoes"></textarea>
+        </div>
 
         <div class="btn-row">
           <button type="submit" class="main" id="btnSalvar">Salvar Cadastro</button>
@@ -366,392 +306,309 @@
 
     <section id="registros">
       <h2>Registros do Censo</h2>
-      <input class="search-box" type="text" id="pesquisa" placeholder="Pesquisar por nome, município, povoado, profissão ou entrevistador" oninput="listarRegistros()" />
+      <input class="search-box" id="pesquisa" oninput="listarRegistros()" placeholder="Pesquisar por nome, comércio, telefone, povoado, entrevistador...">
       <div id="listaRegistros"></div>
     </section>
 
     <section id="relatorios">
       <h2>Relatórios e Exportação</h2>
-      <p>Os dados ficam salvos neste aparelho pelo navegador e também podem ser enviados para uma Planilha Google no Drive quando a URL do Google Apps Script estiver configurada.</p>
-
+      <p>Administrador vê todos os registros. Usuário comum vê apenas os cadastros feitos por ele.</p>
       <div class="btn-row">
         <button class="main" onclick="exportarCSV()">Exportar Excel/CSV</button>
         <button class="main" onclick="sincronizarPendentes()">Enviar Pendentes ao Google Drive</button>
-        <button class="secondary" onclick="imprimirRelatorio()">Imprimir/PDF</button>
-        <button class="secondary danger" onclick="apagarTudo()">Apagar Todos os Dados</button>
+        <button class="secondary" onclick="window.print()">Imprimir/PDF</button>
+        <button id="btnApagarTudo" class="danger" onclick="apagarTudo()">Apagar Todos os Dados</button>
       </div>
-
-      <div id="resumoRelatorio" style="margin-top: 18px;"></div>
+      <div id="resumoRelatorio" style="margin-top:18px"></div>
     </section>
 
-    <footer>
-      Sistema de Censo Municipal - Dados com data e hora automáticas
-    </footer>
+    <section id="admin">
+      <h2>Painel do Administrador</h2>
+      <div id="adminMsg"></div>
+      <div class="registro">
+        <h3>Criar Novo Usuário</h3>
+        <div class="grid-2">
+          <div><label>Nome</label><input id="novoNome"></div>
+          <div><label>Usuário</label><input id="novoUsuario"></div>
+          <div><label>Senha</label><input id="novaSenha" type="password"></div>
+          <div><label>Perfil</label><select id="novoPerfil"><option value="usuario">Usuário/Recenseador</option><option value="admin">Administrador</option></select></div>
+        </div>
+        <div class="btn-row">
+          <button class="main" onclick="criarUsuario()">Criar Usuário</button>
+        </div>
+      </div>
+      <div class="registro">
+        <h3>Usuários Cadastrados</h3>
+        <div id="listaUsuarios"></div>
+      </div>
+    </section>
+
+    <footer>Sistema de Censo Municipal - Pedra Vermelha</footer>
   </div>
+</div>
 
-  <script>
-    const STORAGE_KEY = 'censo_municipal_dados_v1';
-    
-    /*
-      PARA SALVAR NO GOOGLE DRIVE:
-      1. Crie uma Planilha Google no seu Drive.
-      2. Vá em Extensões > Apps Script.
-      3. Cole o código Apps Script que vou te mandar no chat.
-      4. Publique como Web App.
-      5. Copie a URL gerada e cole abaixo, entre as aspas.
-    */
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcRWYSBxmLyTBWSk92OSZoC_PsNSrQF-zgV7YrcOR0AXmX1SFTX8rbg-YTTSgQFkw/exec'; // URL DO WEB APP DO GOOGLE APPS SCRIPT
-    const GOOGLE_SHEET_TESTE = true; // Mantém controle local dos cadastros enviados
+<script>
+const STORAGE_KEY='censo_pedra_vermelha_dados_v2';
+const USERS_KEY='censo_pedra_vermelha_usuarios_v2';
+const SESSION_KEY='censo_pedra_vermelha_sessao_v2';
+const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbzcRWYSBxmLyTBWSk92OSZoC_PsNSrQF-zgV7YrcOR0AXmX1SFTX8rbg-YTTSgQFkw/exec';
 
-    function obterDados() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    }
+function initUsers(){
+  let users=JSON.parse(localStorage.getItem(USERS_KEY)||'[]');
+  if(!users.length){
+    users=[{id:Date.now(),nome:'Administrador',usuario:'admin',senha:'admin123',perfil:'admin',ativo:true,criadoEm:new Date().toLocaleString('pt-BR')}];
+    localStorage.setItem(USERS_KEY,JSON.stringify(users));
+  }
+}
+function getUsers(){return JSON.parse(localStorage.getItem(USERS_KEY)||'[]')}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u))}
+function getSession(){return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}
+function setSession(u){localStorage.setItem(SESSION_KEY,JSON.stringify(u))}
+function obterDados(){return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}
+function salvarDados(d){localStorage.setItem(STORAGE_KEY,JSON.stringify(d))}
+function isAdmin(){return getSession()?.perfil==='admin'}
+function msg(el,txt,tipo='notice'){document.getElementById(el).innerHTML=`<div class="${tipo}">${txt}</div>`;setTimeout(()=>document.getElementById(el).innerHTML='',3500)}
+function campo(id){return document.getElementById(id)?.value?.trim()||''}
+function checked(id){return document.getElementById(id)?.checked?'Sim':'Não'}
+function checks(name){return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(x=>x.value).join(', ')}
 
-    function salvarDados(dados) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
-    }
+document.getElementById('loginForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const usuario=campo('loginUsuario'),senha=campo('loginSenha');
+  const u=getUsers().find(x=>x.usuario===usuario&&x.senha===senha&&x.ativo);
+  if(!u){document.getElementById('loginMsg').innerHTML='<div class="error">Usuário ou senha inválidos.</div>';return}
+  setSession({id:u.id,nome:u.nome,usuario:u.usuario,perfil:u.perfil});
+  carregarApp();
+});
 
-    function abrirAba(id, botao) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      botao.classList.add('active');
-      listarRegistros();
-      atualizarResumo();
-    }
+function carregarApp(){
+  const s=getSession();
+  if(!s){document.getElementById('loginScreen').classList.remove('hidden');document.getElementById('appScreen').classList.add('hidden');return}
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.remove('hidden');
+  document.getElementById('usuarioLogadoNome').textContent=s.nome;
+  document.getElementById('usuarioLogadoPerfil').textContent=s.perfil==='admin'?'Administrador':'Usuário/Recenseador';
+  document.getElementById('tabAdmin').style.display=isAdmin()?'inline-block':'none';
+  document.getElementById('btnApagarTudo').style.display=isAdmin()?'inline-block':'none';
+  atualizarPainel();listarRegistros();atualizarResumo();listarUsuarios();
+}
+function sair(){if(confirm('Deseja sair do sistema?')){localStorage.removeItem(SESSION_KEY);location.reload()}}
 
-    function formatarDataHora() {
-      const agora = new Date();
-      return agora.toLocaleString('pt-BR');
-    }
+function abrirAba(id,botao){
+  if(id==='admin'&&!isAdmin()){alert('Acesso permitido apenas ao administrador.');return}
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');botao.classList.add('active');
+  listarRegistros();atualizarResumo();listarUsuarios();
+}
+function trocarFormulario(){
+  const t=campo('tipoFormulario');
+  document.getElementById('formDomiciliar').classList.toggle('hidden',t!=='domiciliar');
+  document.getElementById('formComerciante').classList.toggle('hidden',t!=='comerciante');
+}
+function addFamilia(item={}){
+  const div=document.createElement('div');
+  div.className='family-row';
+  div.innerHTML=`<input placeholder="Nome" value="${item.nome||''}"><input placeholder="Parentesco" value="${item.parentesco||''}"><input placeholder="Idade" type="number" value="${item.idade||''}"><input placeholder="Escolaridade" value="${item.escolaridade||''}"><input placeholder="Profissão" value="${item.profissao||''}"><button type="button" class="danger small" onclick="this.parentElement.remove()">X</button>`;
+  document.getElementById('familiaLista').appendChild(div);
+}
+function getFamilia(){
+  return Array.from(document.querySelectorAll('#familiaLista .family-row')).map(r=>{
+    const i=r.querySelectorAll('input');
+    return {nome:i[0].value,parentesco:i[1].value,idade:i[2].value,escolaridade:i[3].value,profissao:i[4].value};
+  }).filter(x=>x.nome||x.parentesco||x.idade||x.escolaridade||x.profissao);
+}
+function formatarDataHora(){return new Date().toLocaleString('pt-BR')}
 
-    function pegarMelhoriasSelecionadas() {
-      const checks = Array.from(document.querySelectorAll('input[name="melhorias"]:checked')).map(c => c.value);
-      const outra = document.getElementById('outraMelhoria').value.trim();
-      if (outra) checks.push(outra);
-      return checks;
-    }
+document.getElementById('formCenso').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const tipo=campo('tipoFormulario'), sess=getSession(), dados=obterDados(), editIndex=campo('editIndex');
+  let cadastro={tipo,criadoPorId:sess.id,criadoPorUsuario:sess.usuario,criadoPorNome:sess.nome,dataHora:editIndex===''?formatarDataHora():dados[editIndex].dataHora,atualizadoEm:editIndex===''?'':formatarDataHora(),sincronizadoGoogle:false};
 
-    document.getElementById('formCenso').addEventListener('submit', async function(e) {
-      e.preventDefault();
+  if(tipo==='domiciliar'){
+    if(!campo('d_nome')){alert('Informe o nome completo.');return}
+    cadastro.titulo=campo('d_nome');
+    cadastro.dados={
+      nome:campo('d_nome'),nascimento:campo('d_nascimento'),idade:campo('d_idade'),sexo:campo('d_sexo'),estadoCivil:campo('d_estadoCivil'),telefone:campo('d_telefone'),mae:campo('d_mae'),naturalidade:campo('d_naturalidade'),
+      povoado:campo('d_povoado'),rua:campo('d_rua'),numero:campo('d_numero'),referencia:campo('d_referencia'),cep:campo('d_cep'),familia:getFamilia(),
+      situacaoCasa:campo('d_situacaoCasa'),construcao:campo('d_construcao'),comodos:campo('d_comodos'),banheiros:campo('d_banheiros'),agua:checked('d_agua'),energia:checked('d_energia'),lixo:checked('d_lixo'),internet:checked('d_internet'),saneamento:checked('d_saneamento'),saneamentoQual:campo('d_saneamentoQual'),
+      respFinanceiro:campo('d_respFinanceiro'),profissao:campo('d_profissao'),trabalho:campo('d_trabalho'),localTrabalho:campo('d_localTrabalho'),renda:campo('d_renda'),beneficios:checks('d_beneficios'),beneficiosOutros:campo('d_beneficiosOutros'),
+      deficiencia:checked('d_deficiencia'),doencaCronica:checked('d_doencaCronica'),acompanhamento:checked('d_acompanhamento'),doencaQual:campo('d_doencaQual'),unidadeSaude:campo('d_unidadeSaude'),
+      escola:checked('d_escola'),nomeEscola:campo('d_nomeEscola'),evasao:checked('d_evasao'),escolaridadeFamilia:campo('d_escolaridadeFamilia'),observacoes:campo('d_observacoes'),entrevistador:campo('d_entrevistador'),dataEntrevista:campo('d_dataEntrevista')
+    };
+  }else{
+    if(!campo('c_nome')){alert('Informe o nome do responsável.');return}
+    cadastro.titulo=campo('c_nome');
+    cadastro.dados={
+      nome:campo('c_nome'),nascimento:campo('c_nascimento'),idade:campo('c_idade'),sexo:campo('c_sexo'),estadoCivil:campo('c_estadoCivil'),telefone:campo('c_telefone'),email:campo('c_email'),
+      comercio:campo('c_comercio'),tipoComercio:campo('c_tipoComercio'),possuiCnpj:campo('c_possuiCnpj'),cnpj:campo('c_cnpj'),fundacao:campo('c_fundacao'),cadastroMunicipal:campo('c_cadastroMunicipal'),endereco:campo('c_endereco'),bairro:campo('c_bairro'),referencia:campo('c_referencia'),
+      dias:checks('c_dias'),horario:campo('c_horario'),funcionarios:campo('c_funcionarios'),funcionariosRegistrados:campo('c_funcionariosRegistrados'),tempo:campo('c_tempo'),
+      fonteRenda:campo('c_fonteRenda'),faixaRenda:campo('c_faixaRenda'),conta:campo('c_conta'),cartao:campo('c_cartao'),emprestimo:campo('c_emprestimo'),
+      imovel:campo('c_imovel'),condicao:campo('c_condicao'),energia:checked('c_energia'),agua:checked('c_agua'),internet:checked('c_internet'),acessibilidade:checked('c_acessibilidade'),
+      dificuldades:checks('c_dificuldades'),dificuldadesOutras:campo('c_dificuldadesOutras'),apoio:campo('c_apoio'),apoioQual:campo('c_apoioQual'),cursos:campo('c_cursos'),areaInteresse:campo('c_areaInteresse'),observacoes:campo('c_observacoes')
+    };
+  }
+  if(editIndex==='')dados.push(cadastro);else dados[editIndex]=cadastro;
+  salvarDados(dados);
+  await enviarParaGoogleSheets(cadastro);
+  alert('Cadastro salvo com sucesso.');
+  limparFormulario();atualizarPainel();listarRegistros();atualizarResumo();
+});
 
-      const melhorias = pegarMelhoriasSelecionadas();
-      if (melhorias.length === 0) {
-        alert('Selecione pelo menos uma melhoria necessária.');
-        return;
-      }
+async function enviarParaGoogleSheets(cad){
+  if(!GOOGLE_SCRIPT_URL)return false;
+  try{
+    const p=new URLSearchParams();
+    p.append('acao','salvar');
+    p.append('tipo',cad.tipo);
+    p.append('titulo',cad.titulo||'');
+    p.append('dataHora',cad.dataHora||'');
+    p.append('criadoPor',cad.criadoPorUsuario||'');
+    p.append('dadosJSON',JSON.stringify(cad.dados||{}));
+    p.append('cache',Date.now());
+    await fetch(GOOGLE_SCRIPT_URL+'?'+p.toString(),{method:'GET',mode:'no-cors',cache:'no-store'});
+    return true;
+  }catch(e){console.error(e);return false}
+}
 
-      const dados = obterDados();
-      const editIndex = document.getElementById('editIndex').value;
+function limparFormulario(){
+  document.getElementById('formCenso').reset();
+  document.getElementById('tipoFormulario').value='domiciliar';
+  document.getElementById('editIndex').value='';
+  document.getElementById('btnSalvar').textContent='Salvar Cadastro';
+  document.getElementById('familiaLista').innerHTML='';
+  addFamilia();
+  trocarFormulario();
+}
+function dadosVisiveis(){
+  const d=obterDados(),s=getSession();
+  return isAdmin()?d:d.filter(x=>x.criadoPorId===s.id||x.criadoPorUsuario===s.usuario);
+}
+function atualizarPainel(){
+  const d=dadosVisiveis();
+  document.getElementById('totalCadastros').textContent=d.length;
+  document.getElementById('totalDomiciliar').textContent=d.filter(x=>x.tipo==='domiciliar').length;
+  document.getElementById('totalComerciante').textContent=d.filter(x=>x.tipo==='comerciante').length;
+  document.getElementById('totalUsuarios').textContent=getUsers().length;
+}
+function textoRegistro(c){
+  return JSON.stringify(c).toLowerCase();
+}
+function listarRegistros(){
+  const lista=document.getElementById('listaRegistros'); if(!lista)return;
+  const termo=(campo('pesquisa')||'').toLowerCase();
+  const todos=obterDados();
+  const vis=dadosVisiveis().filter(x=>textoRegistro(x).includes(termo));
+  if(!vis.length){lista.innerHTML='<div class="empty">Nenhum cadastro encontrado.</div>';return}
+  lista.innerHTML=vis.map(c=>{
+    const index=todos.indexOf(c), d=c.dados||{};
+    return `<div class="registro">
+      <h3>${c.tipo==='domiciliar'?'Domiciliar':'Comerciante'} - ${c.titulo||'Sem nome'}</h3>
+      <p><strong>Telefone:</strong> ${d.telefone||'Não informado'}</p>
+      <p><strong>Local:</strong> ${d.povoado||d.bairro||d.endereco||'Não informado'}</p>
+      <p><strong>Criado por:</strong> ${c.criadoPorNome||c.criadoPorUsuario}</p>
+      <p><strong>Data/Hora:</strong> ${c.dataHora}</p>
+      ${c.atualizadoEm?`<p><strong>Atualizado em:</strong> ${c.atualizadoEm}</p>`:''}
+      <details><summary><strong>Ver detalhes</strong></summary><pre style="white-space:pre-wrap;font-size:12px;background:#fff;padding:10px;border-radius:10px;margin-top:8px">${JSON.stringify(d,null,2)}</pre></details>
+      <div class="acoes">
+        <button class="warn small" onclick="editarRegistro(${index})">Editar</button>
+        <button class="danger small" onclick="excluirRegistro(${index})">Excluir</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function editarRegistro(index){
+  const c=obterDados()[index]; if(!c)return;
+  if(!isAdmin()&&c.criadoPorId!==getSession().id){alert('Você só pode editar seus próprios registros.');return}
+  limparFormulario();
+  document.getElementById('editIndex').value=index;
+  document.getElementById('tipoFormulario').value=c.tipo; trocarFormulario();
+  const d=c.dados||{};
+  Object.keys(d).forEach(k=>{
+    const ids=[`d_${k}`,`c_${k}`];
+    ids.forEach(id=>{const el=document.getElementById(id); if(el&&el.type!=='checkbox') el.value=d[k]||'';});
+  });
+  if(c.tipo==='domiciliar'){
+    ['agua','energia','lixo','internet','saneamento','deficiencia','doencaCronica','acompanhamento','escola','evasao'].forEach(k=>{const el=document.getElementById('d_'+k); if(el)el.checked=d[k]==='Sim'});
+    document.getElementById('familiaLista').innerHTML=''; (d.familia||[]).forEach(addFamilia); if(!(d.familia||[]).length)addFamilia();
+  }else{
+    ['energia','agua','internet','acessibilidade'].forEach(k=>{const el=document.getElementById('c_'+k); if(el)el.checked=d[k]==='Sim'});
+  }
+  document.getElementById('btnSalvar').textContent='Atualizar Cadastro';
+  abrirAba('cadastro',document.querySelector('.tabs button'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function excluirRegistro(index){
+  const d=obterDados(), c=d[index]; if(!c)return;
+  if(!isAdmin()&&c.criadoPorId!==getSession().id){alert('Você só pode excluir seus próprios registros.');return}
+  if(!confirm('Deseja excluir este cadastro?'))return;
+  d.splice(index,1);salvarDados(d);atualizarPainel();listarRegistros();atualizarResumo();
+}
+function atualizarResumo(){
+  const el=document.getElementById('resumoRelatorio'); if(!el)return;
+  const d=dadosVisiveis();
+  el.innerHTML=`<div class="registro"><h3>Resumo Geral</h3>
+    <p><strong>Total:</strong> ${d.length}</p>
+    <p><strong>Domiciliar:</strong> ${d.filter(x=>x.tipo==='domiciliar').length}</p>
+    <p><strong>Comerciante:</strong> ${d.filter(x=>x.tipo==='comerciante').length}</p>
+  </div>`;
+}
+async function sincronizarPendentes(){
+  const d=dadosVisiveis();
+  for(const c of d) await enviarParaGoogleSheets(c);
+  alert('Tentativa de envio concluída.');
+}
+function exportarCSV(){
+  const d=dadosVisiveis(); if(!d.length){alert('Não existem dados para exportar.');return}
+  const rows=[['Tipo','Título','Data/Hora','Criado Por','Dados JSON'],...d.map(c=>[c.tipo,c.titulo,c.dataHora,c.criadoPorUsuario,JSON.stringify(c.dados||{})])];
+  const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(';')).join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='censo_pedra_vermelha.csv';a.click();URL.revokeObjectURL(a.href);
+}
+function apagarTudo(){
+  if(!isAdmin()){alert('Apenas o administrador pode apagar todos os dados.');return}
+  if(confirm('Isso apagará todos os cadastros deste aparelho. Continuar?')){localStorage.removeItem(STORAGE_KEY);atualizarPainel();listarRegistros();atualizarResumo()}
+}
 
-      const cadastro = {
-        nome: document.getElementById('nome').value.trim(),
-        idade: document.getElementById('idade').value.trim(),
-        sexo: document.getElementById('sexo').value,
-        profissao: document.getElementById('profissao').value.trim(),
-        municipio: document.getElementById('municipio').value.trim(),
-        povoado: document.getElementById('povoado').value.trim(),
-        telefone: document.getElementById('telefone').value.trim(),
-        entrevistador: document.getElementById('entrevistador').value.trim(),
-        melhorias: melhorias.join(', '),
-        descricao: document.getElementById('descricao').value.trim(),
-        observacoes: document.getElementById('observacoes').value.trim(),
-        dataHora: editIndex === '' ? formatarDataHora() : dados[editIndex].dataHora,
-        atualizadoEm: editIndex === '' ? '' : formatarDataHora(),
-        sincronizadoGoogle: false
-      };
-
-      if (editIndex === '') {
-        dados.push(cadastro);
-      } else {
-        dados[editIndex] = cadastro;
-      }
-
-      salvarDados(dados);
-      atualizarPainel();
-      listarRegistros();
-      atualizarResumo();
-
-      const enviado = await enviarParaGoogleSheets(cadastro);
-
-      if (enviado) {
-        alert('Cadastro salvo no celular e tentativa de envio ao Google Drive realizada. Confira se apareceu na planilha.');
-      } else {
-        alert('Cadastro salvo no celular, mas não foi possível enviar ao Google Drive. Use o botão "Enviar Pendentes ao Google Drive" quando estiver com internet.');
-      }
-
-      limparFormulario();
-      atualizarPainel();
-      listarRegistros();
-      atualizarResumo();
-    });
-
-    async function enviarParaGoogleSheets(cadastro) {
-      if (!GOOGLE_SCRIPT_URL) {
-        return false;
-      }
-
-      try {
-        const params = new URLSearchParams();
-        params.append('acao', 'salvar');
-        params.append('dataHora', cadastro.dataHora || '');
-        params.append('nome', cadastro.nome || '');
-        params.append('idade', cadastro.idade || '');
-        params.append('sexo', cadastro.sexo || '');
-        params.append('profissao', cadastro.profissao || '');
-        params.append('municipio', cadastro.municipio || '');
-        params.append('povoado', cadastro.povoado || '');
-        params.append('telefone', cadastro.telefone || '');
-        params.append('entrevistador', cadastro.entrevistador || '');
-        params.append('melhorias', cadastro.melhorias || '');
-        params.append('descricao', cadastro.descricao || '');
-        params.append('observacoes', cadastro.observacoes || '');
-        params.append('atualizadoEm', cadastro.atualizadoEm || '');
-        params.append('cache', Date.now().toString());
-
-        const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
-
-        await fetch(url, {
-          method: 'GET',
-          mode: 'no-cors',
-          cache: 'no-store'
-        });
-
-        const dados = obterDados();
-        const index = dados.findIndex(d =>
-          d.nome === cadastro.nome &&
-          d.dataHora === cadastro.dataHora &&
-          d.telefone === cadastro.telefone
-        );
-
-        if (index !== -1) {
-          dados[index].sincronizadoGoogle = true;
-          salvarDados(dados);
-        }
-
-        return true;
-      } catch (erro) {
-        console.error('Erro ao enviar para Google Drive:', erro);
-        return false;
-      }
-    }
-
-    function limparFormulario() {
-      document.getElementById('formCenso').reset();
-      document.getElementById('editIndex').value = '';
-      document.getElementById('btnSalvar').textContent = 'Salvar Cadastro';
-    }
-
-    function atualizarPainel() {
-      const dados = obterDados();
-      document.getElementById('totalCadastros').textContent = dados.length;
-      document.getElementById('totalMasculino').textContent = dados.filter(d => d.sexo === 'Masculino').length;
-      document.getElementById('totalFeminino').textContent = dados.filter(d => d.sexo === 'Feminino').length;
-    }
-
-    function listarRegistros() {
-      const lista = document.getElementById('listaRegistros');
-      if (!lista) return;
-
-      const termo = (document.getElementById('pesquisa')?.value || '').toLowerCase();
-      const dados = obterDados();
-
-      const filtrados = dados.filter(d =>
-        d.nome.toLowerCase().includes(termo) ||
-        d.municipio.toLowerCase().includes(termo) ||
-        d.povoado.toLowerCase().includes(termo) ||
-        d.profissao.toLowerCase().includes(termo) ||
-        d.entrevistador.toLowerCase().includes(termo)
-      );
-
-      if (filtrados.length === 0) {
-        lista.innerHTML = '<div class="empty">Nenhum cadastro encontrado.</div>';
-        return;
-      }
-
-      lista.innerHTML = filtrados.map((d, i) => {
-        const indexReal = dados.indexOf(d);
-        return `
-          <div class="registro">
-            <h3>${d.nome}</h3>
-            <p><strong>Idade:</strong> ${d.idade}</p>
-            <p><strong>Sexo:</strong> ${d.sexo}</p>
-            <p><strong>Profissão:</strong> ${d.profissao}</p>
-            <p><strong>Município:</strong> ${d.municipio}</p>
-            <p><strong>Povoado/Bairro:</strong> ${d.povoado}</p>
-            <p><strong>Telefone:</strong> ${d.telefone || 'Não informado'}</p>
-            <p><strong>Melhorias:</strong> ${d.melhorias}</p>
-            <p><strong>Descrição:</strong> ${d.descricao}</p>
-            <p><strong>Entrevistador:</strong> ${d.entrevistador}</p>
-            <p><strong>Data/Hora:</strong> ${d.dataHora}</p>
-            <p><strong>Sincronização Google Drive:</strong> ${d.sincronizadoGoogle ? 'Enviado' : 'Pendente/Local'}</p>
-            ${d.atualizadoEm ? `<p><strong>Atualizado em:</strong> ${d.atualizadoEm}</p>` : ''}
-            <div class="acoes">
-              <button class="edit-btn" onclick="editarRegistro(${indexReal})">Editar</button>
-              <button class="delete-btn" onclick="excluirRegistro(${indexReal})">Excluir</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function editarRegistro(index) {
-      const dados = obterDados();
-      const d = dados[index];
-
-      document.getElementById('editIndex').value = index;
-      document.getElementById('nome').value = d.nome;
-      document.getElementById('idade').value = d.idade;
-      document.getElementById('sexo').value = d.sexo;
-      document.getElementById('profissao').value = d.profissao;
-      document.getElementById('municipio').value = d.municipio;
-      document.getElementById('povoado').value = d.povoado;
-      document.getElementById('telefone').value = d.telefone;
-      document.getElementById('entrevistador').value = d.entrevistador;
-      document.getElementById('descricao').value = d.descricao;
-      document.getElementById('observacoes').value = d.observacoes;
-
-      document.querySelectorAll('input[name="melhorias"]').forEach(c => c.checked = false);
-      const melhorias = d.melhorias.split(',').map(m => m.trim());
-      document.querySelectorAll('input[name="melhorias"]').forEach(c => {
-        if (melhorias.includes(c.value)) c.checked = true;
-      });
-
-      document.getElementById('btnSalvar').textContent = 'Atualizar Cadastro';
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById('cadastro').classList.add('active');
-      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
-      document.querySelector('.tabs button').classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function excluirRegistro(index) {
-      if (!confirm('Deseja realmente excluir este cadastro?')) return;
-      const dados = obterDados();
-      dados.splice(index, 1);
-      salvarDados(dados);
-      atualizarPainel();
-      listarRegistros();
-      atualizarResumo();
-    }
-
-    function atualizarResumo() {
-      const el = document.getElementById('resumoRelatorio');
-      if (!el) return;
-
-      const dados = obterDados();
-      const porPovoado = {};
-      const porMelhoria = {};
-
-      dados.forEach(d => {
-        porPovoado[d.povoado] = (porPovoado[d.povoado] || 0) + 1;
-        d.melhorias.split(',').map(m => m.trim()).forEach(m => {
-          porMelhoria[m] = (porMelhoria[m] || 0) + 1;
-        });
-      });
-
-      const listaPovoados = Object.entries(porPovoado).map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`).join('') || '<p>Nenhum dado registrado.</p>';
-      const listaMelhorias = Object.entries(porMelhoria).map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`).join('') || '<p>Nenhum dado registrado.</p>';
-
-      el.innerHTML = `
-        <div class="registro">
-          <h3>Resumo Geral</h3>
-          <p><strong>Total de cadastros:</strong> ${dados.length}</p>
-          <p><strong>Masculino:</strong> ${dados.filter(d => d.sexo === 'Masculino').length}</p>
-          <p><strong>Feminino:</strong> ${dados.filter(d => d.sexo === 'Feminino').length}</p>
-        </div>
-        <div class="registro">
-          <h3>Cadastros por Povoado/Bairro</h3>
-          ${listaPovoados}
-        </div>
-        <div class="registro">
-          <h3>Principais Melhorias Solicitadas</h3>
-          ${listaMelhorias}
-        </div>
-      `;
-    }
-
-    async function sincronizarPendentes() {
-      if (!GOOGLE_SCRIPT_URL) {
-        alert('A URL do Google Apps Script ainda não foi configurada no código.');
-        return;
-      }
-
-      const dados = obterDados();
-      const pendentes = dados.filter(d => !d.sincronizadoGoogle);
-
-      if (pendentes.length === 0) {
-        alert('Não há cadastros pendentes para sincronizar.');
-        return;
-      }
-
-      for (const cadastro of pendentes) {
-        await enviarParaGoogleSheets(cadastro);
-      }
-
-      alert('Sincronização concluída.');
-    }
-
-    function exportarCSV() {
-      const dados = obterDados();
-      if (dados.length === 0) {
-        alert('Não existem dados para exportar.');
-        return;
-      }
-
-      const cabecalho = [
-        'Data/Hora', 'Nome completo', 'Idade', 'Sexo', 'Profissão', 'Município',
-        'Povoado/Bairro/Comunidade', 'Telefone', 'Entrevistador', 'Melhorias',
-        'Descrição', 'Observações', 'Atualizado em'
-      ];
-
-      const linhas = dados.map(d => [
-        d.dataHora, d.nome, d.idade, d.sexo, d.profissao, d.municipio,
-        d.povoado, d.telefone, d.entrevistador, d.melhorias,
-        d.descricao, d.observacoes, d.atualizadoEm
-      ]);
-
-      const csv = [cabecalho, ...linhas]
-        .map(linha => linha.map(campo => `"${String(campo || '').replace(/"/g, '""')}"`).join(';'))
-        .join('\n');
-
-      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'censo_municipal.csv';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function imprimirRelatorio() {
-      atualizarResumo();
-      window.print();
-    }
-
-    function apagarTudo() {
-      if (!confirm('Atenção: isso apagará todos os cadastros deste aparelho. Deseja continuar?')) return;
-      localStorage.removeItem(STORAGE_KEY);
-      atualizarPainel();
-      listarRegistros();
-      atualizarResumo();
-      alert('Todos os dados foram apagados.');
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-        const abaCadastroAtiva = document.getElementById('cadastro').classList.contains('active');
-        if (abaCadastroAtiva) {
-          e.preventDefault();
-          document.getElementById('formCenso').requestSubmit();
-        }
-      }
-    });
-
-    atualizarPainel();
-    listarRegistros();
-    atualizarResumo();
-  </script>
+function criarUsuario(){
+  if(!isAdmin())return;
+  const nome=campo('novoNome'),usuario=campo('novoUsuario'),senha=campo('novaSenha'),perfil=campo('novoPerfil');
+  if(!nome||!usuario||!senha){msg('adminMsg','Preencha nome, usuário e senha.','error');return}
+  const users=getUsers();
+  if(users.some(u=>u.usuario===usuario)){msg('adminMsg','Este usuário já existe.','error');return}
+  users.push({id:Date.now(),nome,usuario,senha,perfil,ativo:true,criadoEm:new Date().toLocaleString('pt-BR')});
+  saveUsers(users);
+  document.getElementById('novoNome').value='';document.getElementById('novoUsuario').value='';document.getElementById('novaSenha').value='';document.getElementById('novoPerfil').value='usuario';
+  listarUsuarios();atualizarPainel();msg('adminMsg','Usuário criado com sucesso.');
+}
+function listarUsuarios(){
+  const el=document.getElementById('listaUsuarios'); if(!el)return;
+  if(!isAdmin()){el.innerHTML='';return}
+  const users=getUsers();
+  el.innerHTML=`<table><thead><tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead><tbody>`+
+    users.map(u=>`<tr><td>${u.nome}</td><td>${u.usuario}</td><td>${u.perfil}</td><td>${u.ativo?'Ativo':'Desativado'}</td><td>
+      <button class="small ${u.ativo?'warn':'main'}" onclick="toggleUsuario(${u.id})">${u.ativo?'Desativar':'Ativar'}</button>
+      <button class="small danger" onclick="removerUsuario(${u.id})">Excluir</button>
+    </td></tr>`).join('')+`</tbody></table>`;
+}
+function toggleUsuario(id){
+  const sess=getSession(), users=getUsers(), u=users.find(x=>x.id===id);
+  if(!u)return; if(u.id===sess.id){alert('Você não pode desativar seu próprio usuário.');return}
+  u.ativo=!u.ativo; saveUsers(users); listarUsuarios();
+}
+function removerUsuario(id){
+  const sess=getSession(); if(id===sess.id){alert('Você não pode excluir seu próprio usuário.');return}
+  if(!confirm('Excluir este usuário?'))return;
+  saveUsers(getUsers().filter(u=>u.id!==id)); listarUsuarios(); atualizarPainel();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.tagName!=='TEXTAREA'){
+    if(!document.getElementById('loginScreen').classList.contains('hidden'))return;
+    const cad=document.getElementById('cadastro').classList.contains('active');
+    if(cad){e.preventDefault();document.getElementById('formCenso').requestSubmit();}
+  }
+});
+initUsers(); addFamilia(); carregarApp();
+</script>
 </body>
 </html>
-
