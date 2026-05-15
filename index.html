@@ -5,64 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>App Censo Pedra Vermelha</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
-    body{background:#eef3f9;color:#1f2937}
+    :root{
+      --pedra:#8f2f20;
+      --pedra-escura:#5f1d14;
+      --barro:#b85c38;
+      --areia:#f6e7c9;
+      --areia-clara:#fff8ed;
+      --sol:#e0a632;
+      --verde:#4f7d45;
+      --texto:#2d1f1a;
+      --muted:#735b4d;
+      --branco:#ffffff;
+      --sombra:0 18px 45px rgba(95,29,20,.16);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,Helvetica,sans-serif}
+    body{
+      color:var(--texto);
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(224,166,50,.25), transparent 28%),
+        radial-gradient(circle at 95% 5%, rgba(143,47,32,.18), transparent 30%),
+        linear-gradient(135deg,#fff7e8 0%,#f2d9b4 46%,#e7b98a 100%);
+      background-attachment:fixed;
+    }
+    body:before{
+      content:"";position:fixed;inset:0;pointer-events:none;opacity:.24;z-index:-1;
+      background-image:linear-gradient(30deg,rgba(95,29,20,.10) 12%,transparent 12.5%,transparent 87%,rgba(95,29,20,.10) 87.5%,rgba(95,29,20,.10)),linear-gradient(150deg,rgba(95,29,20,.10) 12%,transparent 12.5%,transparent 87%,rgba(95,29,20,.10) 87.5%,rgba(95,29,20,.10));
+      background-size:58px 100px;
+    }
     .hidden{display:none!important}
-    header{background:linear-gradient(135deg,#0f4c81,#1976d2);color:#fff;padding:22px 16px;text-align:center;border-bottom-left-radius:24px;border-bottom-right-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-    header h1{font-size:22px;margin-bottom:6px}
-    header p{font-size:14px;opacity:.95}
-    .container{max-width:1100px;margin:18px auto;padding:0 14px 30px}
-    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(135deg,#e8f1fb,#f8fbff)}
-    .login-card{width:100%;max-width:430px;background:#fff;border-radius:24px;padding:24px;box-shadow:0 12px 40px rgba(15,76,129,.18)}
-    .login-card h1{color:#0f4c81;font-size:24px;text-align:center;margin-bottom:8px}
-    .login-card p{text-align:center;color:#667085;font-size:14px;margin-bottom:18px}
-    label{display:block;margin-top:12px;margin-bottom:5px;font-weight:bold;font-size:14px}
-    input,select,textarea{width:100%;padding:12px;border:1px solid #cfd8e3;border-radius:12px;font-size:15px;outline:none;background:#f9fbfd}
+    header{
+      position:relative;overflow:hidden;color:#fff;padding:30px 18px 32px;text-align:center;border-bottom-left-radius:34px;border-bottom-right-radius:34px;box-shadow:var(--sombra);
+      background:linear-gradient(135deg,var(--pedra-escura),var(--pedra) 55%,var(--barro));
+    }
+    header:before{content:"";position:absolute;inset:auto -80px -90px -80px;height:170px;background:rgba(255,255,255,.08);border-radius:50% 50% 0 0;transform:rotate(-2deg)}
+    header:after{content:"✦";position:absolute;right:24px;top:18px;color:rgba(255,255,255,.32);font-size:48px}
+    header h1{font-size:28px;margin-bottom:8px;letter-spacing:.3px;position:relative}
+    header p{font-size:15px;opacity:.96;position:relative}
+    header h1:before{content:"◆";display:inline-grid;place-items:center;margin-right:9px;color:var(--sol);filter:drop-shadow(0 2px 2px rgba(0,0,0,.22))}
+    .container{max-width:1220px;margin:18px auto;padding:0 14px 34px}
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(135deg,#fff4df,#eec08f)}
+    .login-card{width:100%;max-width:460px;background:rgba(255,255,255,.84);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.75);border-radius:30px;padding:28px;box-shadow:var(--sombra);position:relative;overflow:hidden}
+    .login-card:before{content:"";position:absolute;left:-60px;top:-60px;width:155px;height:155px;border-radius:50%;background:rgba(184,92,56,.16)}
+    .login-card h1{color:var(--pedra);font-size:28px;text-align:center;margin-bottom:8px;position:relative}
+    .login-card h1:before{content:"◆";color:var(--sol);margin-right:8px}
+    .login-card p{text-align:center;color:var(--muted);font-size:14px;margin-bottom:18px;position:relative}
+    label{display:block;margin-top:12px;margin-bottom:5px;font-weight:800;font-size:14px;color:#442a20}
+    input,select,textarea{width:100%;padding:13px;border:1px solid #e3c8a6;border-radius:15px;font-size:15px;outline:none;background:#fffdf8;color:var(--texto);transition:.2s}
+    input:focus,select:focus,textarea:focus{border-color:var(--barro);box-shadow:0 0 0 4px rgba(184,92,56,.15);background:#fff}
     textarea{min-height:88px;resize:vertical}
     .btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-    button{border:none;border-radius:14px;padding:12px 14px;font-weight:bold;cursor:pointer}
-    button.main{background:#0f4c81;color:white;flex:1;min-width:150px}
-    button.secondary{background:#e5e7eb;color:#1f2937;flex:1;min-width:150px}
-    button.danger{background:#dc2626;color:#fff}
-    button.warn{background:#f59e0b;color:#fff}
-    button.small{padding:8px 10px;border-radius:10px;font-size:13px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0;flex-wrap:wrap}
-    .userbox{background:#fff;border-radius:14px;padding:10px 12px;box-shadow:0 2px 8px rgba(0,0,0,.08);font-size:14px}
-    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-    .card{background:#fff;padding:14px;border-radius:16px;box-shadow:0 3px 12px rgba(0,0,0,.08);text-align:center}
-    .card strong{display:block;font-size:24px;color:#0f4c81}
-    .card span{font-size:13px;color:#555}
-    .tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:3px}
-    .tabs button{background:#fff;color:#0f4c81;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}
-    .tabs button.active{background:#0f4c81;color:#fff}
-    section{display:none;background:#fff;border-radius:18px;padding:18px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
-    section.active{display:block}
-    h2{font-size:20px;margin-bottom:14px;color:#0f4c81}
-    h3{font-size:17px;color:#0f4c81;margin:16px 0 8px}
+    button{border:none;border-radius:16px;padding:12px 15px;font-weight:800;cursor:pointer;transition:.18s;box-shadow:0 7px 18px rgba(95,29,20,.11)}
+    button:hover{transform:translateY(-1px);filter:brightness(1.03)}
+    button.main{background:linear-gradient(135deg,var(--pedra),var(--barro));color:white;flex:1;min-width:150px}
+    button.secondary{background:#fff4de;color:var(--pedra);border:1px solid #edd0a7;flex:1;min-width:150px}
+    button.danger{background:linear-gradient(135deg,#b42318,#e04f3e);color:#fff}
+    button.warn{background:linear-gradient(135deg,#d0831d,#edae36);color:#fff}
+    button.small{padding:8px 11px;border-radius:12px;font-size:13px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 0;flex-wrap:wrap}
+    .userbox{background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.8);border-radius:18px;padding:12px 14px;box-shadow:0 8px 22px rgba(95,29,20,.10);font-size:14px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+    .card{background:rgba(255,255,255,.88);padding:18px 14px;border-radius:22px;box-shadow:0 10px 26px rgba(95,29,20,.10);text-align:center;border:1px solid rgba(255,255,255,.75);position:relative;overflow:hidden}
+    .card:before{content:"";position:absolute;right:-20px;top:-25px;width:70px;height:70px;border-radius:50%;background:rgba(224,166,50,.18)}
+    .card strong{display:block;font-size:30px;color:var(--pedra);position:relative}
+    .card span{font-size:13px;color:var(--muted);font-weight:700;position:relative}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;background:rgba(255,255,255,.42);padding:10px;border-radius:24px;box-shadow:0 8px 24px rgba(95,29,20,.08)}
+    .tabs button{background:#fff8eb;color:var(--pedra);box-shadow:none;white-space:nowrap;border:1px solid #eed2a9}
+    .tabs button.active{background:linear-gradient(135deg,var(--pedra-escura),var(--pedra));color:#fff;border-color:transparent}
+    section{display:none;background:rgba(255,255,255,.9);border-radius:26px;padding:22px;box-shadow:0 14px 34px rgba(95,29,20,.12);border:1px solid rgba(255,255,255,.8)}
+    section.active{display:block;animation:subir .22s ease-out}
+    @keyframes subir{from{opacity:.5;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    h2{font-size:22px;margin-bottom:14px;color:var(--pedra);display:flex;align-items:center;gap:8px}
+    h2:before{content:"◆";color:var(--sol);font-size:18px}
+    h3{font-size:17px;color:var(--pedra);margin:18px 0 8px;padding-top:4px;border-top:1px dashed rgba(143,47,32,.22)}
     .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     .checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
-    .check-item{display:flex;align-items:center;gap:8px;background:#f1f5f9;padding:9px;border-radius:10px;font-size:14px}
-    .check-item input{width:auto}
-    .registro{background:#f8fafc;border:1px solid #dbe4ee;padding:14px;border-radius:14px;margin-bottom:10px}
-    .registro h3{margin-top:0}
-    .registro p{font-size:14px;margin:4px 0}
+    .check-item{display:flex;align-items:center;gap:8px;background:#fff3dc;padding:10px;border-radius:14px;font-size:14px;border:1px solid #efd3a8}
+    .check-item input{width:auto;accent-color:var(--pedra)}
+    .registro{background:#fffaf2;border:1px solid #ead1ad;padding:16px;border-radius:20px;margin-bottom:12px;box-shadow:0 8px 20px rgba(95,29,20,.07)}
+    .registro h3{margin-top:0;border-top:none}
+    .registro p{font-size:14px;margin:5px 0;color:#4b342b}
     .acoes{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-    .empty{text-align:center;color:#666;padding:20px}
+    .empty{text-align:center;color:var(--muted);padding:20px}
     .search-box{margin-bottom:14px}
-    table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff;border-radius:12px;overflow:hidden}
-    th,td{border:1px solid #dbe4ee;padding:9px;font-size:13px;text-align:left}
-    th{background:#f1f5f9;color:#0f4c81}
+    table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(95,29,20,.06)}
+    th,td{border:1px solid #edd5b5;padding:10px;font-size:13px;text-align:left}
+    th{background:#fff1d6;color:var(--pedra)}
     .family-row{display:grid;grid-template-columns:2fr 1fr .7fr 1.5fr 1.5fr 42px;gap:8px;margin-top:8px}
-    .notice{background:#ecfdf3;border:1px solid #bbf7d0;color:#166534;padding:10px;border-radius:12px;font-size:13px;margin:10px 0}
-    .detail-table{width:100%;border-collapse:collapse;margin-top:10px}
-    .detail-table th{width:32%;background:#eef6ff;color:#0f4c81}
-    .detail-table th,.detail-table td{border:1px solid #dbe4ee;padding:8px;font-size:13px;vertical-align:top}
-    .chart-box{background:#f8fafc;border:1px solid #dbe4ee;border-radius:14px;padding:14px;margin-top:14px}
-    canvas{max-width:100%;background:#fff;border-radius:12px;border:1px solid #e5e7eb}
-    .error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:10px;border-radius:12px;font-size:13px;margin:10px 0}
-    footer{text-align:center;font-size:12px;color:#667085;margin-top:18px}
-    @media(max-width:800px){.cards,.grid-2,.grid-3,.checkbox-grid{grid-template-columns:1fr}.family-row{grid-template-columns:1fr}.family-row button{width:100%}header h1{font-size:19px}}
+    .notice{background:#ecf8e9;border:1px solid #bde0b6;color:#2e6730;padding:11px;border-radius:14px;font-size:13px;margin:10px 0}
+    .error{background:#fff0ec;border:1px solid #f5b8a9;color:#912018;padding:11px;border-radius:14px;font-size:13px;margin:10px 0}
+    .preview-box{background:#fff;border:1px solid #ecd0a8;border-radius:16px;padding:12px;margin-top:8px}
+    .preview-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .preview-item{background:#fff6e6;border-radius:12px;padding:9px;font-size:13px;border:1px solid #f0d7b0}
+    .preview-item strong{display:block;color:var(--pedra);margin-bottom:2px}
+    canvas{background:#fff;border-radius:18px;padding:10px;border:1px solid #edd5b5;max-width:100%}
+    footer{text-align:center;font-size:12px;color:#7d5d4b;margin-top:18px;font-weight:700}
+    @media(max-width:900px){.cards,.grid-2,.grid-3,.checkbox-grid,.tabs{grid-template-columns:1fr 1fr}.family-row{grid-template-columns:1fr}.family-row button{width:100%}header h1{font-size:22px}.container{padding:0 10px 24px}section{padding:16px;border-radius:20px}}
+    @media(max-width:560px){.cards,.grid-2,.grid-3,.checkbox-grid,.tabs,.preview-grid{grid-template-columns:1fr}.topbar{align-items:stretch}.topbar button{width:100%}.login-card{padding:22px}.tabs{position:sticky;top:0;z-index:5}button.main,button.secondary{min-width:100%}}
+    @media print{body{background:#fff}.tabs,.topbar,.btn-row,button{display:none!important}section{display:block!important;box-shadow:none;border:0}.container{max-width:100%;margin:0}header{border-radius:0;box-shadow:none}}
   </style>
 </head>
 <body>
@@ -70,7 +111,7 @@
 <div id="loginScreen" class="login-wrap">
   <div class="login-card">
     <h1>Censo Pedra Vermelha</h1>
-    <p>Acesso restrito para recenseadores e administrador</p>
+    <p>Acesso restrito para recenseadores e administrador<br><strong style="color:#8f2f20">Pedra Vermelha em dados, cuidado e desenvolvimento</strong></p>
     <div id="loginMsg"></div>
     <form id="loginForm">
       <label>Usuário</label>
@@ -89,8 +130,8 @@
 
 <div id="appScreen" class="hidden">
   <header>
-    <h1>App Censo Pedra Vermelha</h1>
-    <p>Formulários Domiciliar e Comerciante com controle de usuários</p>
+    <h1>Censo Pedra Vermelha</h1>
+    <p>Identidade comunitária • Gestão municipal • Território, famílias e comércio local</p>
   </header>
 
   <div class="container">
@@ -211,10 +252,9 @@
           <h3>9. Observações Gerais</h3>
           <textarea id="d_observacoes"></textarea>
 
-          <h3>10. Dados do Entrevistador</h3>
-          <div class="grid-2">
-            <div><label>Nome do Entrevistador(a)</label><input id="d_entrevistador"></div>
-            <div><label>Data e Hora</label><input value="Gerada automaticamente ao salvar" disabled></div>
+          <h3>10. Registro Automático do Sistema</h3>
+          <div class="notice">
+            O sistema registra automaticamente o usuário responsável pelo cadastro, a data e o horário da entrevista.
           </div>
         </div>
 
@@ -321,7 +361,7 @@
         <button class="main" onclick="gerarPDFRegistros()">Gerar PDF de Todos os Registros</button>
         <button class="secondary" onclick="window.print()">Imprimir Tela</button>
       </div>
-      <input class="search-box" id="pesquisa" oninput="listarRegistros()" placeholder="Pesquisar por nome, comércio, telefone, povoado, entrevistador...">
+      <input class="search-box" id="pesquisa" oninput="listarRegistros()" placeholder="Pesquisar por nome, comércio, telefone, povoado, usuário responsável...">
       <div id="listaRegistros"></div>
     </section>
 
@@ -359,6 +399,16 @@
         </div>
         <div class="btn-row">
           <button class="main" onclick="criarUsuario()">Criar Usuário</button>
+        </div>
+      </div>
+      <div class="registro">
+        <h3>Alterar Minha Senha</h3>
+        <div class="grid-2">
+          <div><label>Senha Atual</label><input id="senhaAtualAdmin" type="password" placeholder="Digite sua senha atual"></div>
+          <div><label>Nova Senha</label><input id="novaSenhaAdmin" type="password" placeholder="Digite a nova senha"></div>
+        </div>
+        <div class="btn-row">
+          <button class="main" onclick="alterarSenhaAdmin()">Alterar Senha</button>
         </div>
       </div>
       <div class="registro">
@@ -458,7 +508,7 @@ document.getElementById('formCenso').addEventListener('submit',async e=>{
       situacaoCasa:campo('d_situacaoCasa'),construcao:campo('d_construcao'),comodos:campo('d_comodos'),banheiros:campo('d_banheiros'),agua:checked('d_agua'),energia:checked('d_energia'),lixo:checked('d_lixo'),internet:checked('d_internet'),saneamento:checked('d_saneamento'),saneamentoQual:campo('d_saneamentoQual'),
       respFinanceiro:campo('d_respFinanceiro'),profissao:campo('d_profissao'),trabalho:campo('d_trabalho'),localTrabalho:campo('d_localTrabalho'),renda:campo('d_renda'),beneficios:checks('d_beneficios'),beneficiosOutros:campo('d_beneficiosOutros'),
       deficiencia:checked('d_deficiencia'),doencaCronica:checked('d_doencaCronica'),acompanhamento:checked('d_acompanhamento'),doencaQual:campo('d_doencaQual'),unidadeSaude:campo('d_unidadeSaude'),
-      escola:checked('d_escola'),nomeEscola:campo('d_nomeEscola'),evasao:checked('d_evasao'),escolaridadeFamilia:campo('d_escolaridadeFamilia'),cursos:campo('d_cursos'),areaInteresse:campo('d_areaInteresse'),observacoes:campo('d_observacoes'),entrevistador:campo('d_entrevistador'),dataEntrevista:cadastro.dataHora
+      escola:checked('d_escola'),nomeEscola:campo('d_nomeEscola'),evasao:checked('d_evasao'),escolaridadeFamilia:campo('d_escolaridadeFamilia'),cursos:campo('d_cursos'),areaInteresse:campo('d_areaInteresse'),observacoes:campo('d_observacoes')
     };
   }else{
     if(!campo('c_nome')){alert('Informe o nome do responsável.');return}
@@ -540,7 +590,7 @@ function nomeCampo(k){
     nome:'Nome',nascimento:'Data de Nascimento',idade:'Idade',sexo:'Sexo',estadoCivil:'Estado Civil',telefone:'Telefone',mae:'Nome da Mãe',naturalidade:'Naturalidade',
     povoado:'Povoado/Comunidade',rua:'Rua/Avenida',numero:'Número',referencia:'Ponto de Referência',cep:'CEP',familia:'Composição Familiar',situacaoCasa:'Situação da Casa',construcao:'Tipo de Construção',comodos:'Quantidade de Cômodos',banheiros:'Quantidade de Banheiros',agua:'Água Encanada',energia:'Energia Elétrica',lixo:'Coleta de Lixo',internet:'Internet',saneamento:'Saneamento Básico',saneamentoQual:'Tipo de Saneamento',
     respFinanceiro:'Responsável Financeiro',profissao:'Profissão',trabalho:'Situação de Trabalho',localTrabalho:'Local de Trabalho',renda:'Renda Familiar Mensal',beneficios:'Benefícios Sociais',beneficiosOutros:'Outros Benefícios',deficiencia:'Pessoa com Deficiência',doencaCronica:'Doença Crônica',acompanhamento:'Acompanhamento Médico',doencaQual:'Doença/Deficiência',unidadeSaude:'Unidade de Saúde',
-    escola:'Frequenta Escola',nomeEscola:'Nome da Escola',evasao:'Evasão Escolar',escolaridadeFamilia:'Escolaridade da Família',cursos:'Interesse em Cursos/Capacitações',areaInteresse:'Área de Interesse',observacoes:'Observações',entrevistador:'Entrevistador',dataEntrevista:'Data/Hora da Entrevista',
+    escola:'Frequenta Escola',nomeEscola:'Nome da Escola',evasao:'Evasão Escolar',escolaridadeFamilia:'Escolaridade da Família',cursos:'Interesse em Cursos/Capacitações',areaInteresse:'Área de Interesse',observacoes:'Observações',
     email:'E-mail',comercio:'Nome do Comércio',tipoComercio:'Tipo de Comércio',possuiCnpj:'Possui CNPJ',cnpj:'CNPJ',fundacao:'Data de Fundação',cadastroMunicipal:'Cadastro Municipal',endereco:'Endereço',bairro:'Bairro/Comunidade',dias:'Dias de Funcionamento',horario:'Horário de Funcionamento',funcionarios:'Quantidade de Funcionários',funcionariosRegistrados:'Funcionários Registrados',tempo:'Tempo de Funcionamento',fonteRenda:'Principal Fonte de Renda',faixaRenda:'Faixa de Renda Mensal',conta:'Conta Bancária Empresarial',cartao:'Máquina de Cartão',emprestimo:'Empréstimos/Financiamentos',imovel:'Tipo do Imóvel',condicao:'Condição da Estrutura',acessibilidade:'Acessibilidade',dificuldades:'Principais Dificuldades',dificuldadesOutras:'Outras Dificuldades',apoio:'Necessita de Apoio',apoioQual:'Qual Apoio',c_cursos:'Interesse em Cursos',areaInteresse:'Área de Interesse'
   };
   return nomes[k]||k;
@@ -736,6 +786,24 @@ function removerUsuario(id){
   if(!confirm('Excluir este usuário?'))return;
   saveUsers(getUsers().filter(u=>u.id!==id)); listarUsuarios(); atualizarPainel();
 }
+function alterarSenhaAdmin(){
+  if(!isAdmin()){alert('Apenas o administrador pode alterar a senha nesta opção.');return}
+  const atual=campo('senhaAtualAdmin');
+  const nova=campo('novaSenhaAdmin');
+  if(!atual||!nova){alert('Preencha a senha atual e a nova senha.');return}
+  if(nova.length<4){alert('A nova senha deve ter pelo menos 4 caracteres.');return}
+  const sess=getSession();
+  const users=getUsers();
+  const u=users.find(x=>x.id===sess.id);
+  if(!u){alert('Usuário não encontrado. Faça login novamente.');return}
+  if(u.senha!==atual){alert('Senha atual incorreta.');return}
+  u.senha=nova;
+  saveUsers(users);
+  document.getElementById('senhaAtualAdmin').value='';
+  document.getElementById('novaSenhaAdmin').value='';
+  alert('Senha alterada com sucesso!');
+}
+
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target.tagName!=='TEXTAREA'){
     if(!document.getElementById('loginScreen').classList.contains('hidden'))return;
