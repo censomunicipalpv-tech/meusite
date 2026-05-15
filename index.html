@@ -55,6 +55,11 @@
     th{background:#f1f5f9;color:#0f4c81}
     .family-row{display:grid;grid-template-columns:2fr 1fr .7fr 1.5fr 1.5fr 42px;gap:8px;margin-top:8px}
     .notice{background:#ecfdf3;border:1px solid #bbf7d0;color:#166534;padding:10px;border-radius:12px;font-size:13px;margin:10px 0}
+    .detail-table{width:100%;border-collapse:collapse;margin-top:10px}
+    .detail-table th{width:32%;background:#eef6ff;color:#0f4c81}
+    .detail-table th,.detail-table td{border:1px solid #dbe4ee;padding:8px;font-size:13px;vertical-align:top}
+    .chart-box{background:#f8fafc;border:1px solid #dbe4ee;border-radius:14px;padding:14px;margin-top:14px}
+    canvas{max-width:100%;background:#fff;border-radius:12px;border:1px solid #e5e7eb}
     .error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:10px;border-radius:12px;font-size:13px;margin:10px 0}
     footer{text-align:center;font-size:12px;color:#667085;margin-top:18px}
     @media(max-width:800px){.cards,.grid-2,.grid-3,.checkbox-grid{grid-template-columns:1fr}.family-row{grid-template-columns:1fr}.family-row button{width:100%}header h1{font-size:19px}}
@@ -197,13 +202,19 @@
           <label>Nome da Escola</label><input id="d_nomeEscola">
           <label>Maior nível de escolaridade da família</label><input id="d_escolaridadeFamilia">
 
-          <h3>8. Observações Gerais</h3>
+          <h3>8. Cursos e Capacitações</h3>
+          <div class="grid-2">
+            <div><label>Possui interesse em cursos/capacitações?</label><select id="d_cursos"><option></option><option>Sim</option><option>Não</option></select></div>
+            <div><label>Área de interesse</label><input id="d_areaInteresse" placeholder="Ex: informática, culinária, corte e costura..."></div>
+          </div>
+
+          <h3>9. Observações Gerais</h3>
           <textarea id="d_observacoes"></textarea>
 
-          <h3>9. Dados do Entrevistador</h3>
+          <h3>10. Dados do Entrevistador</h3>
           <div class="grid-2">
             <div><label>Nome do Entrevistador(a)</label><input id="d_entrevistador"></div>
-            <div><label>Data da Entrevista</label><input id="d_dataEntrevista" type="date"></div>
+            <div><label>Data e Hora</label><input value="Gerada automaticamente ao salvar" disabled></div>
           </div>
         </div>
 
@@ -306,6 +317,10 @@
 
     <section id="registros">
       <h2>Registros do Censo</h2>
+      <div class="btn-row" style="margin-bottom:14px">
+        <button class="main" onclick="gerarPDFRegistros()">Gerar PDF de Todos os Registros</button>
+        <button class="secondary" onclick="window.print()">Imprimir Tela</button>
+      </div>
       <input class="search-box" id="pesquisa" oninput="listarRegistros()" placeholder="Pesquisar por nome, comércio, telefone, povoado, entrevistador...">
       <div id="listaRegistros"></div>
     </section>
@@ -315,11 +330,20 @@
       <p>Administrador vê todos os registros. Usuário comum vê apenas os cadastros feitos por ele.</p>
       <div class="btn-row">
         <button class="main" onclick="exportarCSV()">Exportar Excel/CSV</button>
-        <button class="main" onclick="sincronizarPendentes()">Enviar Pendentes ao Google Drive</button>
-        <button class="secondary" onclick="window.print()">Imprimir/PDF</button>
+        <button class="main" onclick="gerarPDFRegistros()">Gerar PDF dos Registros</button>
+        <button class="main" onclick="gerarPDFRelatorioGraficos()">Gerar PDF dos Gráficos</button>
+        <button class="secondary" onclick="sincronizarPendentes()">Enviar Pendentes ao Google Drive</button>
         <button id="btnApagarTudo" class="danger" onclick="apagarTudo()">Apagar Todos os Dados</button>
       </div>
       <div id="resumoRelatorio" style="margin-top:18px"></div>
+      <div class="chart-box">
+        <h3>Gráfico por Tipo de Cadastro</h3>
+        <canvas id="graficoTipo" width="900" height="320"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Gráfico por Recenseador</h3>
+        <canvas id="graficoUsuario" width="900" height="320"></canvas>
+      </div>
     </section>
 
     <section id="admin">
@@ -434,7 +458,7 @@ document.getElementById('formCenso').addEventListener('submit',async e=>{
       situacaoCasa:campo('d_situacaoCasa'),construcao:campo('d_construcao'),comodos:campo('d_comodos'),banheiros:campo('d_banheiros'),agua:checked('d_agua'),energia:checked('d_energia'),lixo:checked('d_lixo'),internet:checked('d_internet'),saneamento:checked('d_saneamento'),saneamentoQual:campo('d_saneamentoQual'),
       respFinanceiro:campo('d_respFinanceiro'),profissao:campo('d_profissao'),trabalho:campo('d_trabalho'),localTrabalho:campo('d_localTrabalho'),renda:campo('d_renda'),beneficios:checks('d_beneficios'),beneficiosOutros:campo('d_beneficiosOutros'),
       deficiencia:checked('d_deficiencia'),doencaCronica:checked('d_doencaCronica'),acompanhamento:checked('d_acompanhamento'),doencaQual:campo('d_doencaQual'),unidadeSaude:campo('d_unidadeSaude'),
-      escola:checked('d_escola'),nomeEscola:campo('d_nomeEscola'),evasao:checked('d_evasao'),escolaridadeFamilia:campo('d_escolaridadeFamilia'),observacoes:campo('d_observacoes'),entrevistador:campo('d_entrevistador'),dataEntrevista:campo('d_dataEntrevista')
+      escola:checked('d_escola'),nomeEscola:campo('d_nomeEscola'),evasao:checked('d_evasao'),escolaridadeFamilia:campo('d_escolaridadeFamilia'),cursos:campo('d_cursos'),areaInteresse:campo('d_areaInteresse'),observacoes:campo('d_observacoes'),entrevistador:campo('d_entrevistador'),dataEntrevista:cadastro.dataHora
     };
   }else{
     if(!campo('c_nome')){alert('Informe o nome do responsável.');return}
@@ -450,25 +474,41 @@ document.getElementById('formCenso').addEventListener('submit',async e=>{
   }
   if(editIndex==='')dados.push(cadastro);else dados[editIndex]=cadastro;
   salvarDados(dados);
-  await enviarParaGoogleSheets(cadastro);
-  alert('Cadastro salvo com sucesso.');
+
+  const enviado=await enviarParaGoogleSheets(cadastro);
+  if(enviado){
+    alert('Cadastro salvo no aparelho e enviado para a planilha.');
+  }else{
+    alert('Cadastro salvo no aparelho, mas não foi enviado para a planilha. Verifique o Apps Script.');
+  }
+
   limparFormulario();atualizarPainel();listarRegistros();atualizarResumo();
 });
 
 async function enviarParaGoogleSheets(cad){
   if(!GOOGLE_SCRIPT_URL)return false;
   try{
-    const p=new URLSearchParams();
-    p.append('acao','salvar');
-    p.append('tipo',cad.tipo);
-    p.append('titulo',cad.titulo||'');
-    p.append('dataHora',cad.dataHora||'');
-    p.append('criadoPor',cad.criadoPorUsuario||'');
-    p.append('dadosJSON',JSON.stringify(cad.dados||{}));
-    p.append('cache',Date.now());
-    await fetch(GOOGLE_SCRIPT_URL+'?'+p.toString(),{method:'GET',mode:'no-cors',cache:'no-store'});
+    const form=new FormData();
+    form.append('acao','salvar');
+    form.append('tipo',cad.tipo||'');
+    form.append('titulo',cad.titulo||'');
+    form.append('dataHora',cad.dataHora||'');
+    form.append('criadoPor',cad.criadoPorUsuario||'');
+    form.append('criadoPorNome',cad.criadoPorNome||'');
+    form.append('dadosJSON',JSON.stringify(cad.dados||{}));
+    form.append('cache',Date.now());
+
+    await fetch(GOOGLE_SCRIPT_URL,{
+      method:'POST',
+      mode:'no-cors',
+      body:form
+    });
+
     return true;
-  }catch(e){console.error(e);return false}
+  }catch(e){
+    console.error('Erro ao enviar para Google Sheets:',e);
+    return false;
+  }
 }
 
 function limparFormulario(){
@@ -494,6 +534,33 @@ function atualizarPainel(){
 function textoRegistro(c){
   return JSON.stringify(c).toLowerCase();
 }
+
+function nomeCampo(k){
+  const nomes={
+    nome:'Nome',nascimento:'Data de Nascimento',idade:'Idade',sexo:'Sexo',estadoCivil:'Estado Civil',telefone:'Telefone',mae:'Nome da Mãe',naturalidade:'Naturalidade',
+    povoado:'Povoado/Comunidade',rua:'Rua/Avenida',numero:'Número',referencia:'Ponto de Referência',cep:'CEP',familia:'Composição Familiar',situacaoCasa:'Situação da Casa',construcao:'Tipo de Construção',comodos:'Quantidade de Cômodos',banheiros:'Quantidade de Banheiros',agua:'Água Encanada',energia:'Energia Elétrica',lixo:'Coleta de Lixo',internet:'Internet',saneamento:'Saneamento Básico',saneamentoQual:'Tipo de Saneamento',
+    respFinanceiro:'Responsável Financeiro',profissao:'Profissão',trabalho:'Situação de Trabalho',localTrabalho:'Local de Trabalho',renda:'Renda Familiar Mensal',beneficios:'Benefícios Sociais',beneficiosOutros:'Outros Benefícios',deficiencia:'Pessoa com Deficiência',doencaCronica:'Doença Crônica',acompanhamento:'Acompanhamento Médico',doencaQual:'Doença/Deficiência',unidadeSaude:'Unidade de Saúde',
+    escola:'Frequenta Escola',nomeEscola:'Nome da Escola',evasao:'Evasão Escolar',escolaridadeFamilia:'Escolaridade da Família',cursos:'Interesse em Cursos/Capacitações',areaInteresse:'Área de Interesse',observacoes:'Observações',entrevistador:'Entrevistador',dataEntrevista:'Data/Hora da Entrevista',
+    email:'E-mail',comercio:'Nome do Comércio',tipoComercio:'Tipo de Comércio',possuiCnpj:'Possui CNPJ',cnpj:'CNPJ',fundacao:'Data de Fundação',cadastroMunicipal:'Cadastro Municipal',endereco:'Endereço',bairro:'Bairro/Comunidade',dias:'Dias de Funcionamento',horario:'Horário de Funcionamento',funcionarios:'Quantidade de Funcionários',funcionariosRegistrados:'Funcionários Registrados',tempo:'Tempo de Funcionamento',fonteRenda:'Principal Fonte de Renda',faixaRenda:'Faixa de Renda Mensal',conta:'Conta Bancária Empresarial',cartao:'Máquina de Cartão',emprestimo:'Empréstimos/Financiamentos',imovel:'Tipo do Imóvel',condicao:'Condição da Estrutura',acessibilidade:'Acessibilidade',dificuldades:'Principais Dificuldades',dificuldadesOutras:'Outras Dificuldades',apoio:'Necessita de Apoio',apoioQual:'Qual Apoio',c_cursos:'Interesse em Cursos',areaInteresse:'Área de Interesse'
+  };
+  return nomes[k]||k;
+}
+function escapeHTML(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function valorFormatado(v){
+  if(Array.isArray(v)){
+    if(!v.length)return 'Não informado';
+    return '<table class="detail-table"><thead><tr><th>Nome</th><th>Parentesco</th><th>Idade</th><th>Escolaridade</th><th>Profissão</th></tr></thead><tbody>'+v.map(f=>`<tr><td>${escapeHTML(f.nome)}</td><td>${escapeHTML(f.parentesco)}</td><td>${escapeHTML(f.idade)}</td><td>${escapeHTML(f.escolaridade)}</td><td>${escapeHTML(f.profissao)}</td></tr>`).join('')+'</tbody></table>';
+  }
+  return escapeHTML(v||'Não informado');
+}
+function montarDetalhesHTML(c){
+  const d=c.dados||{};
+  let html=`<table class="detail-table"><tbody><tr><th>Tipo</th><td>${c.tipo==='domiciliar'?'Censo Domiciliar':'Censo Comerciante'}</td></tr><tr><th>Título</th><td>${escapeHTML(c.titulo||'')}</td></tr><tr><th>Data/Hora</th><td>${escapeHTML(c.dataHora||'')}</td></tr><tr><th>Criado por</th><td>${escapeHTML(c.criadoPorNome||c.criadoPorUsuario||'')}</td></tr>`;
+  Object.keys(d).forEach(k=>{html+=`<tr><th>${nomeCampo(k)}</th><td>${valorFormatado(d[k])}</td></tr>`});
+  html+='</tbody></table>';
+  return html;
+}
+
 function listarRegistros(){
   const lista=document.getElementById('listaRegistros'); if(!lista)return;
   const termo=(campo('pesquisa')||'').toLowerCase();
@@ -509,8 +576,9 @@ function listarRegistros(){
       <p><strong>Criado por:</strong> ${c.criadoPorNome||c.criadoPorUsuario}</p>
       <p><strong>Data/Hora:</strong> ${c.dataHora}</p>
       ${c.atualizadoEm?`<p><strong>Atualizado em:</strong> ${c.atualizadoEm}</p>`:''}
-      <details><summary><strong>Ver detalhes</strong></summary><pre style="white-space:pre-wrap;font-size:12px;background:#fff;padding:10px;border-radius:10px;margin-top:8px">${JSON.stringify(d,null,2)}</pre></details>
+      <details><summary><strong>Ver detalhes</strong></summary>${montarDetalhesHTML(c)}</details>
       <div class="acoes">
+        <button class="main small" onclick="gerarPDFRegistroIndividual(${index})">Gerar PDF</button>
         <button class="warn small" onclick="editarRegistro(${index})">Editar</button>
         <button class="danger small" onclick="excluirRegistro(${index})">Excluir</button>
       </div>
@@ -552,12 +620,79 @@ function atualizarResumo(){
     <p><strong>Domiciliar:</strong> ${d.filter(x=>x.tipo==='domiciliar').length}</p>
     <p><strong>Comerciante:</strong> ${d.filter(x=>x.tipo==='comerciante').length}</p>
   </div>`;
+  setTimeout(renderizarGraficos,50);
 }
 async function sincronizarPendentes(){
   const d=dadosVisiveis();
   for(const c of d) await enviarParaGoogleSheets(c);
   alert('Tentativa de envio concluída.');
 }
+
+function desenharBarras(canvasId, labels, valores){
+  const canvas=document.getElementById(canvasId); if(!canvas)return;
+  const ctx=canvas.getContext('2d'), w=canvas.width, h=canvas.height;
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='#0f4c81'; ctx.font='bold 16px Arial';
+  const max=Math.max(1,...valores), margem=55, areaW=w-margem*2, areaH=h-90, barW=areaW/Math.max(1,labels.length)*0.55;
+  ctx.strokeStyle='#cfd8e3'; ctx.beginPath(); ctx.moveTo(margem,25); ctx.lineTo(margem,h-55); ctx.lineTo(w-25,h-55); ctx.stroke();
+  labels.forEach((lab,i)=>{
+    const x=margem+(areaW/labels.length)*i+(areaW/labels.length-barW)/2;
+    const bh=(valores[i]/max)*areaH;
+    const y=h-55-bh;
+    ctx.fillStyle='#1976d2'; ctx.fillRect(x,y,barW,bh);
+    ctx.fillStyle='#1f2937'; ctx.font='bold 14px Arial'; ctx.fillText(String(valores[i]),x+barW/2-5,y-8);
+    ctx.font='12px Arial'; ctx.fillText(String(lab).slice(0,18),x,h-32);
+  });
+}
+function renderizarGraficos(){
+  const d=dadosVisiveis();
+  desenharBarras('graficoTipo',['Domiciliar','Comerciante'],[d.filter(x=>x.tipo==='domiciliar').length,d.filter(x=>x.tipo==='comerciante').length]);
+  const porUsuario={}; d.forEach(c=>{const n=c.criadoPorNome||c.criadoPorUsuario||'Não informado'; porUsuario[n]=(porUsuario[n]||0)+1});
+  desenharBarras('graficoUsuario',Object.keys(porUsuario),Object.values(porUsuario));
+}
+function abrirJanelaPDF(titulo, corpo){
+  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${titulo}</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:22px;color:#111;background:#fff}h1{color:#0f4c81;text-align:center;margin-bottom:8px}h2{margin-top:22px;color:#0f4c81}.sub{text-align:center;margin-bottom:18px;color:#444}.registro{page-break-inside:avoid;border:1px solid #ccc;border-radius:10px;padding:12px;margin-bottom:14px}.detail-table{width:100%;border-collapse:collapse;margin-top:8px}.detail-table th,.detail-table td{border:1px solid #ccc;padding:7px;font-size:12px;text-align:left;vertical-align:top}.detail-table th{background:#eef6ff;width:32%}img{max-width:100%;border:1px solid #ddd;border-radius:10px;margin:10px 0}.print-btn{background:#0f4c81;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:bold;cursor:pointer;margin-bottom:18px}@media print{.print-btn{display:none}body{padding:8px}.registro{break-inside:avoid;page-break-inside:avoid}}</style></head><body><button class="print-btn" onclick="window.print()">Imprimir / Salvar em PDF</button>${corpo}</body></html>`;
+
+  const w=window.open('', '_blank');
+  if(w && w.document){
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+    setTimeout(()=>{try{w.focus();w.print();}catch(e){}},800);
+    return;
+  }
+
+  // Caso o navegador bloqueie pop-up, gera um arquivo HTML do relatório para abrir e imprimir.
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(titulo||'relatorio').toLowerCase().replace(/[^a-z0-9]+/g,'_')+'.html';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
+  alert('O navegador bloqueou a janela do PDF. Foi baixado um arquivo HTML do relatório. Abra o arquivo e clique em Imprimir / Salvar em PDF.');
+}
+function gerarPDFRegistros(){
+  const d=dadosVisiveis(); if(!d.length){alert('Não existem registros para gerar PDF.');return}
+  const corpo='<h1>Relatório de Registros do Censo Pedra Vermelha</h1><p><strong>Gerado em:</strong> '+formatarDataHora()+'</p>'+d.map(c=>`<div class="registro"><h2>${c.tipo==='domiciliar'?'Domiciliar':'Comerciante'} - ${escapeHTML(c.titulo||'Sem nome')}</h2>${montarDetalhesHTML(c)}</div>`).join('');
+  abrirJanelaPDF('PDF dos Registros',corpo);
+}
+function gerarPDFRegistroIndividual(index){
+  const c=obterDados()[index];
+  if(!c){alert('Registro não encontrado.');return}
+  if(!isAdmin()&&c.criadoPorId!==getSession().id&&c.criadoPorUsuario!==getSession().usuario){alert('Você só pode gerar PDF dos seus próprios registros.');return}
+  const corpo=`<h1>Registro do Censo Pedra Vermelha</h1><p><strong>Gerado em:</strong> ${formatarDataHora()}</p><div class="registro"><h2>${c.tipo==='domiciliar'?'Domiciliar':'Comerciante'} - ${escapeHTML(c.titulo||'Sem nome')}</h2>${montarDetalhesHTML(c)}</div>`;
+  abrirJanelaPDF('PDF do Registro',corpo);
+}
+function gerarPDFRelatorioGraficos(){
+  renderizarGraficos();
+  const d=dadosVisiveis();
+  const img1=document.getElementById('graficoTipo')?.toDataURL('image/png')||'';
+  const img2=document.getElementById('graficoUsuario')?.toDataURL('image/png')||'';
+  const corpo=`<h1>Relatório Geral com Gráficos</h1><p><strong>Gerado em:</strong> ${formatarDataHora()}</p><div class="registro"><h2>Resumo</h2><p><strong>Total:</strong> ${d.length}</p><p><strong>Domiciliar:</strong> ${d.filter(x=>x.tipo==='domiciliar').length}</p><p><strong>Comerciante:</strong> ${d.filter(x=>x.tipo==='comerciante').length}</p></div><h2>Gráfico por Tipo de Cadastro</h2><img src="${img1}"><h2>Gráfico por Recenseador</h2><img src="${img2}">`;
+  abrirJanelaPDF('PDF dos Gráficos',corpo);
+}
+
 function exportarCSV(){
   const d=dadosVisiveis(); if(!d.length){alert('Não existem dados para exportar.');return}
   const rows=[['Tipo','Título','Data/Hora','Criado Por','Dados JSON'],...d.map(c=>[c.tipo,c.titulo,c.dataHora,c.criadoPorUsuario,JSON.stringify(c.dados||{})])];
