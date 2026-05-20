@@ -1,817 +1,355 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>App Censo Pedra Vermelha</title>
-  <style>
-    :root{
-      --pedra:#8f2f20;
-      --pedra-escura:#5f1d14;
-      --barro:#b85c38;
-      --areia:#f6e7c9;
-      --areia-clara:#fff8ed;
-      --sol:#e0a632;
-      --verde:#4f7d45;
-      --texto:#2d1f1a;
-      --muted:#735b4d;
-      --branco:#ffffff;
-      --sombra:0 18px 45px rgba(95,29,20,.16);
-    }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,Helvetica,sans-serif}
-    body{
-      color:var(--texto);
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 15% 10%, rgba(224,166,50,.25), transparent 28%),
-        radial-gradient(circle at 95% 5%, rgba(143,47,32,.18), transparent 30%),
-        linear-gradient(135deg,#fff7e8 0%,#f2d9b4 46%,#e7b98a 100%);
-      background-attachment:fixed;
-    }
-    body:before{
-      content:"";position:fixed;inset:0;pointer-events:none;opacity:.24;z-index:-1;
-      background-image:linear-gradient(30deg,rgba(95,29,20,.10) 12%,transparent 12.5%,transparent 87%,rgba(95,29,20,.10) 87.5%,rgba(95,29,20,.10)),linear-gradient(150deg,rgba(95,29,20,.10) 12%,transparent 12.5%,transparent 87%,rgba(95,29,20,.10) 87.5%,rgba(95,29,20,.10));
-      background-size:58px 100px;
-    }
-    .hidden{display:none!important}
-    header{
-      position:relative;overflow:hidden;color:#fff;padding:30px 18px 32px;text-align:center;border-bottom-left-radius:34px;border-bottom-right-radius:34px;box-shadow:var(--sombra);
-      background:linear-gradient(135deg,var(--pedra-escura),var(--pedra) 55%,var(--barro));
-    }
-    header:before{content:"";position:absolute;inset:auto -80px -90px -80px;height:170px;background:rgba(255,255,255,.08);border-radius:50% 50% 0 0;transform:rotate(-2deg)}
-    header:after{content:"✦";position:absolute;right:24px;top:18px;color:rgba(255,255,255,.32);font-size:48px}
-    header h1{font-size:28px;margin-bottom:8px;letter-spacing:.3px;position:relative}
-    header p{font-size:15px;opacity:.96;position:relative}
-    header h1:before{content:"◆";display:inline-grid;place-items:center;margin-right:9px;color:var(--sol);filter:drop-shadow(0 2px 2px rgba(0,0,0,.22))}
-    .container{max-width:1220px;margin:18px auto;padding:0 14px 34px}
-    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(135deg,#fff4df,#eec08f)}
-    .login-card{width:100%;max-width:460px;background:rgba(255,255,255,.84);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.75);border-radius:30px;padding:28px;box-shadow:var(--sombra);position:relative;overflow:hidden}
-    .login-card:before{content:"";position:absolute;left:-60px;top:-60px;width:155px;height:155px;border-radius:50%;background:rgba(184,92,56,.16)}
-    .login-card h1{color:var(--pedra);font-size:28px;text-align:center;margin-bottom:8px;position:relative}
-    .login-card h1:before{content:"◆";color:var(--sol);margin-right:8px}
-    .login-card p{text-align:center;color:var(--muted);font-size:14px;margin-bottom:18px;position:relative}
-    label{display:block;margin-top:12px;margin-bottom:5px;font-weight:800;font-size:14px;color:#442a20}
-    input,select,textarea{width:100%;padding:13px;border:1px solid #e3c8a6;border-radius:15px;font-size:15px;outline:none;background:#fffdf8;color:var(--texto);transition:.2s}
-    input:focus,select:focus,textarea:focus{border-color:var(--barro);box-shadow:0 0 0 4px rgba(184,92,56,.15);background:#fff}
-    textarea{min-height:88px;resize:vertical}
-    .btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-    button{border:none;border-radius:16px;padding:12px 15px;font-weight:800;cursor:pointer;transition:.18s;box-shadow:0 7px 18px rgba(95,29,20,.11)}
-    button:hover{transform:translateY(-1px);filter:brightness(1.03)}
-    button.main{background:linear-gradient(135deg,var(--pedra),var(--barro));color:white;flex:1;min-width:150px}
-    button.secondary{background:#fff4de;color:var(--pedra);border:1px solid #edd0a7;flex:1;min-width:150px}
-    button.danger{background:linear-gradient(135deg,#b42318,#e04f3e);color:#fff}
-    button.warn{background:linear-gradient(135deg,#d0831d,#edae36);color:#fff}
-    button.small{padding:8px 11px;border-radius:12px;font-size:13px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 0;flex-wrap:wrap}
-    .userbox{background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.8);border-radius:18px;padding:12px 14px;box-shadow:0 8px 22px rgba(95,29,20,.10);font-size:14px}
-    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
-    .card{background:rgba(255,255,255,.88);padding:18px 14px;border-radius:22px;box-shadow:0 10px 26px rgba(95,29,20,.10);text-align:center;border:1px solid rgba(255,255,255,.75);position:relative;overflow:hidden}
-    .card:before{content:"";position:absolute;right:-20px;top:-25px;width:70px;height:70px;border-radius:50%;background:rgba(224,166,50,.18)}
-    .card strong{display:block;font-size:30px;color:var(--pedra);position:relative}
-    .card span{font-size:13px;color:var(--muted);font-weight:700;position:relative}
-    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;background:rgba(255,255,255,.42);padding:10px;border-radius:24px;box-shadow:0 8px 24px rgba(95,29,20,.08)}
-    .tabs button{background:#fff8eb;color:var(--pedra);box-shadow:none;white-space:nowrap;border:1px solid #eed2a9}
-    .tabs button.active{background:linear-gradient(135deg,var(--pedra-escura),var(--pedra));color:#fff;border-color:transparent}
-    section{display:none;background:rgba(255,255,255,.9);border-radius:26px;padding:22px;box-shadow:0 14px 34px rgba(95,29,20,.12);border:1px solid rgba(255,255,255,.8)}
-    section.active{display:block;animation:subir .22s ease-out}
-    @keyframes subir{from{opacity:.5;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    h2{font-size:22px;margin-bottom:14px;color:var(--pedra);display:flex;align-items:center;gap:8px}
-    h2:before{content:"◆";color:var(--sol);font-size:18px}
-    h3{font-size:17px;color:var(--pedra);margin:18px 0 8px;padding-top:4px;border-top:1px dashed rgba(143,47,32,.22)}
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
-    .check-item{display:flex;align-items:center;gap:8px;background:#fff3dc;padding:10px;border-radius:14px;font-size:14px;border:1px solid #efd3a8}
-    .check-item input{width:auto;accent-color:var(--pedra)}
-    .registro{background:#fffaf2;border:1px solid #ead1ad;padding:16px;border-radius:20px;margin-bottom:12px;box-shadow:0 8px 20px rgba(95,29,20,.07)}
-    .registro h3{margin-top:0;border-top:none}
-    .registro p{font-size:14px;margin:5px 0;color:#4b342b}
-    .acoes{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-    .empty{text-align:center;color:var(--muted);padding:20px}
-    .search-box{margin-bottom:14px}
-    table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(95,29,20,.06)}
-    th,td{border:1px solid #edd5b5;padding:10px;font-size:13px;text-align:left}
-    th{background:#fff1d6;color:var(--pedra)}
-    .family-row{display:grid;grid-template-columns:2fr 1fr .7fr 1.5fr 1.5fr 42px;gap:8px;margin-top:8px}
-    .notice{background:#ecf8e9;border:1px solid #bde0b6;color:#2e6730;padding:11px;border-radius:14px;font-size:13px;margin:10px 0}
-    .error{background:#fff0ec;border:1px solid #f5b8a9;color:#912018;padding:11px;border-radius:14px;font-size:13px;margin:10px 0}
-    .preview-box{background:#fff;border:1px solid #ecd0a8;border-radius:16px;padding:12px;margin-top:8px}
-    .preview-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-    .preview-item{background:#fff6e6;border-radius:12px;padding:9px;font-size:13px;border:1px solid #f0d7b0}
-    .preview-item strong{display:block;color:var(--pedra);margin-bottom:2px}
-    canvas{background:#fff;border-radius:18px;padding:10px;border:1px solid #edd5b5;max-width:100%}
-    footer{text-align:center;font-size:12px;color:#7d5d4b;margin-top:18px;font-weight:700}
-    @media(max-width:900px){.cards,.grid-2,.grid-3,.checkbox-grid,.tabs{grid-template-columns:1fr 1fr}.family-row{grid-template-columns:1fr}.family-row button{width:100%}header h1{font-size:22px}.container{padding:0 10px 24px}section{padding:16px;border-radius:20px}}
-    @media(max-width:560px){.cards,.grid-2,.grid-3,.checkbox-grid,.tabs,.preview-grid{grid-template-columns:1fr}.topbar{align-items:stretch}.topbar button{width:100%}.login-card{padding:22px}.tabs{position:sticky;top:0;z-index:5}button.main,button.secondary{min-width:100%}}
-    @media print{body{background:#fff}.tabs,.topbar,.btn-row,button{display:none!important}section{display:block!important;box-shadow:none;border:0}.container{max-width:100%;margin:0}header{border-radius:0;box-shadow:none}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>App Censo Pedra Vermelha</title>
+
+<style>
+:root{
+--pedra:#8f2f20;
+--pedra-escura:#5f1d14;
+--barro:#b85c38;
+--areia:#f6e7c9;
+--texto:#2d1f1a;
+--muted:#735b4d;
+--sol:#e0a632;
+--sombra:0 18px 45px rgba(95,29,20,.16)
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{
+color:var(--texto);
+background:linear-gradient(135deg,#fff7e8,#f2d9b4,#e7b98a);
+min-height:100vh
+}
+.hidden{display:none!important}
+header{
+background:linear-gradient(135deg,var(--pedra-escura),var(--pedra),var(--barro));
+color:#fff;
+padding:30px;
+text-align:center;
+border-radius:0 0 30px 30px
+}
+.container{max-width:1200px;margin:auto;padding:20px}
+.login-wrap{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh
+}
+.login-card{
+background:#fff;
+padding:30px;
+border-radius:25px;
+width:100%;
+max-width:450px;
+box-shadow:var(--sombra)
+}
+label{display:block;margin:10px 0 5px;font-weight:bold}
+input,select,textarea{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:12px
+}
+button{
+padding:12px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold
+}
+.main{background:var(--pedra);color:#fff}
+.secondary{background:#eee}
+.danger{background:#c00;color:#fff}
+.notice{
+background:#eaf8e9;
+padding:10px;
+border-radius:10px;
+margin-top:10px
+}
+.grid-2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px
+}
+.family-row{
+display:grid;
+grid-template-columns:repeat(5,1fr) 50px;
+gap:8px;
+margin-top:8px
+}
+section{
+background:#fff;
+padding:20px;
+border-radius:20px;
+margin-top:15px
+}
+.tabs button{margin-right:10px}
+</style>
 </head>
 <body>
 
 <div id="loginScreen" class="login-wrap">
-  <div class="login-card">
-    <h1>Censo Pedra Vermelha</h1>
-    <p>Acesso restrito para recenseadores e administrador<br><strong style="color:#8f2f20">Pedra Vermelha em dados, cuidado e desenvolvimento</strong></p>
-    <div id="loginMsg"></div>
-    <form id="loginForm">
-      <label>Usuário</label>
-      <input id="loginUsuario" autocomplete="username" required placeholder="Digite o usuário">
-      <label>Senha</label>
-      <input id="loginSenha" type="password" autocomplete="current-password" required placeholder="Digite a senha">
-      <div class="btn-row">
-        <button type="submit" class="main">Entrar</button>
-      </div>
-    </form>
-    <div class="notice">
-      Acesso inicial: <strong>admin</strong> | Senha: <strong>admin123</strong>
-    </div>
-  </div>
+<div class="login-card">
+<h1>Censo Pedra Vermelha</h1>
+<p>Acesso restrito</p>
+
+<div id="loginMsg"></div>
+
+<form id="loginForm">
+<label>Usuário</label>
+<input id="loginUsuario" required>
+
+<label>Senha</label>
+<input id="loginSenha" type="password" required>
+
+<br><br>
+<button class="main" type="submit">Entrar</button>
+</form>
+
+<div class="notice">
+Acesso restrito ao sistema
+</div>
+</div>
 </div>
 
 <div id="appScreen" class="hidden">
-  <header>
-    <h1>Censo Pedra Vermelha</h1>
-    <p>Identidade comunitária • Gestão municipal • Território, famílias e comércio local</p>
-  </header>
 
-  <div class="container">
-    <div class="topbar">
-      <div class="userbox">
-        Logado como: <strong id="usuarioLogadoNome"></strong> —
-        Perfil: <strong id="usuarioLogadoPerfil"></strong>
-      </div>
-      <button class="danger small" onclick="sair()">Sair</button>
-    </div>
+<header>
+<h1>Censo Pedra Vermelha</h1>
+</header>
 
-    <div class="cards">
-      <div class="card"><strong id="totalCadastros">0</strong><span>Total</span></div>
-      <div class="card"><strong id="totalDomiciliar">0</strong><span>Domiciliar</span></div>
-      <div class="card"><strong id="totalComerciante">0</strong><span>Comerciante</span></div>
-      <div class="card"><strong id="totalUsuarios">0</strong><span>Usuários</span></div>
-    </div>
+<div class="container">
 
-    <div class="tabs">
-      <button class="active" onclick="abrirAba('cadastro', this)">Novo Cadastro</button>
-      <button onclick="abrirAba('registros', this)">Registros</button>
-      <button onclick="abrirAba('relatorios', this)">Relatórios</button>
-      <button id="tabAdmin" onclick="abrirAba('admin', this)">Admin</button>
-    </div>
+<section id="cadastro">
 
-    <section id="cadastro" class="active">
-      <h2>Novo Cadastro</h2>
-      <input type="hidden" id="editIndex" value="">
-      <label>Tipo de Formulário</label>
-      <select id="tipoFormulario" onchange="trocarFormulario()">
-        <option value="domiciliar">Censo Domiciliar</option>
-        <option value="comerciante">Censo Comerciante</option>
-      </select>
+<h2>Novo Cadastro</h2>
 
-      <form id="formCenso">
-        <div id="formDomiciliar">
-          <h3>1. Identificação Pessoal</h3>
-          <div class="grid-2">
-            <div><label>Nome Completo *</label><input id="d_nome" required></div>
-            <div><label>Data de Nascimento</label><input id="d_nascimento" type="date"></div>
-            <div><label>Idade</label><input id="d_idade" type="number" min="0"></div>
-            <div><label>Sexo</label><select id="d_sexo"><option value="">Selecione</option><option>Masculino</option><option>Feminino</option><option>Outro</option><option>Prefere não informar</option></select></div>
-            <div><label>Estado Civil</label><input id="d_estadoCivil"></div>
-            <div><label>Telefone</label><input id="d_telefone"></div>
-            <div><label>Nome da Mãe</label><input id="d_mae"></div>
-            <div><label>Naturalidade</label><input id="d_naturalidade"></div>
-          </div>
+<label>Tipo</label>
+<select id="tipoFormulario">
+<option value="domiciliar">Domiciliar</option>
+</select>
 
-          <h3>2. Endereço e Localização</h3>
-          <div class="grid-2">
-            <div><label>Bairro/Comunidade/Povoado</label><input id="d_povoado" value="Pedra Vermelha"></div>
-            <div><label>Rua/Avenida</label><input id="d_rua"></div>
-            <div><label>Número</label><input id="d_numero"></div>
-            <div><label>Ponto de Referência</label><input id="d_referencia"></div>
-            <div><label>CEP</label><input id="d_cep" value="48.805-899"></div>
-          </div>
+<form id="formCenso">
 
-          <h3>3. Composição Familiar</h3>
-          <div id="familiaLista"></div>
-          <button type="button" class="secondary small" onclick="addFamilia()">+ Adicionar Familiar</button>
+<h3>5. Trabalho e Renda</h3>
 
-          <h3>4. Condições de Moradia</h3>
-          <div class="grid-2">
-            <div><label>Situação da Casa</label><select id="d_situacaoCasa"><option></option><option>Própria</option><option>Alugada</option><option>Cedida</option><option>Financiada</option></select></div>
-            <div><label>Tipo de Construção</label><select id="d_construcao"><option></option><option>Alvenaria</option><option>Madeira</option><option>Taipa</option><option>Outra</option></select></div>
-            <div><label>Quantidade de Cômodos</label><input id="d_comodos" type="number"></div>
-            <div><label>Quantidade de Banheiros</label><input id="d_banheiros" type="number"></div>
-          </div>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" id="d_agua"> Água Encanada</label>
-            <label class="check-item"><input type="checkbox" id="d_energia"> Energia Elétrica</label>
-            <label class="check-item"><input type="checkbox" id="d_lixo"> Coleta de Lixo</label>
-            <label class="check-item"><input type="checkbox" id="d_internet"> Internet</label>
-            <label class="check-item"><input type="checkbox" id="d_saneamento"> Saneamento Básico</label>
-          </div>
-          <label>Se possui saneamento, qual?</label><input id="d_saneamentoQual">
+<div class="grid-2">
 
-          <h3>5. Trabalho e Renda</h3>
-          <div class="grid-2">
-            <div><label>Responsável Financeiro</label><input id="d_respFinanceiro"></div>
-            <div><label>Profissão</label><input id="d_profissao"></div>
-            <div><label>Situação de Trabalho</label><select id="d_trabalho"><option></option><option>Empregado</option><option>Desempregado</option><option>Autônomo</option><option>Aposentado</option></select></div>
-            <div><label>Local de Trabalho</label><input id="d_localTrabalho"></div>
-            <div><label>Renda Familiar Mensal</label><input id="d_renda"></div>
-          </div>
-          <label>Benefícios Sociais</label>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" name="d_beneficios" value="Bolsa Família"> Bolsa Família</label>
-            <label class="check-item"><input type="checkbox" name="d_beneficios" value="BPC"> BPC</label>
-            <label class="check-item"><input type="checkbox" name="d_beneficios" value="Auxílio Gás"> Auxílio Gás</label>
-            <label class="check-item"><input type="checkbox" name="d_beneficios" value="Outros"> Outros</label>
-          </div>
-          <label>Outros benefícios</label><input id="d_beneficiosOutros">
+<div>
+<label>Responsável Financeiro</label>
 
-          <h3>6. Saúde</h3>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" id="d_deficiencia"> Pessoa com Deficiência na Família</label>
-            <label class="check-item"><input type="checkbox" id="d_doencaCronica"> Pessoa com Doença Crônica</label>
-            <label class="check-item"><input type="checkbox" id="d_acompanhamento"> Necessita Acompanhamento Médico</label>
-          </div>
-          <label>Qual doença/deficiência?</label><input id="d_doencaQual">
-          <label>Unidade de Saúde Utilizada</label><input id="d_unidadeSaude">
+<select id="d_respFinanceiro">
+<option></option>
+<option>Eu</option>
+<option>Meu pai</option>
+<option>Minha mãe</option>
+<option>Meu pai e minha mãe</option>
+<option>Eu e meu pai</option>
+<option>Eu e minha mãe</option>
+<option>Eu e meu cônjuge</option>
+<option>Cônjuge</option>
+<option>Outro familiar</option>
+<option>Outro</option>
+</select>
+</div>
 
-          <h3>7. Educação</h3>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" id="d_escola"> Crianças/adolescentes frequentam escola</label>
-            <label class="check-item"><input type="checkbox" id="d_evasao"> Existe evasão escolar</label>
-          </div>
-          <label>Nome da Escola</label><input id="d_nomeEscola">
-          <label>Maior nível de escolaridade da família</label><input id="d_escolaridadeFamilia">
+<div>
+<label>Profissão</label>
+<input id="d_profissao">
+</div>
 
-          <h3>8. Cursos e Capacitações</h3>
-          <div class="grid-2">
-            <div><label>Possui interesse em cursos/capacitações?</label><select id="d_cursos"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>Área de interesse</label><input id="d_areaInteresse" placeholder="Ex: informática, culinária, corte e costura..."></div>
-          </div>
+</div>
 
-          <h3>9. Observações Gerais</h3>
-          <textarea id="d_observacoes"></textarea>
+<h3>7. Educação</h3>
 
-          <h3>10. Registro Automático do Sistema</h3>
-          <div class="notice">
-            O sistema registra automaticamente o usuário responsável pelo cadastro, a data e o horário da entrevista.
-          </div>
-        </div>
+<div class="grid-2">
+<label>
+<input type="checkbox" id="d_escola">
+Há crianças estudando
+</label>
 
-        <div id="formComerciante" class="hidden">
-          <h3>1. Identificação do Responsável</h3>
-          <div class="grid-2">
-            <div><label>Nome do Responsável *</label><input id="c_nome"></div>
-            <div><label>Data de Nascimento</label><input id="c_nascimento" type="date"></div>
-            <div><label>Idade</label><input id="c_idade" type="number"></div>
-            <div><label>Sexo</label><select id="c_sexo"><option></option><option>Masculino</option><option>Feminino</option><option>Outro</option><option>Prefere não informar</option></select></div>
-            <div><label>Estado Civil</label><input id="c_estadoCivil"></div>
-            <div><label>Telefone/WhatsApp</label><input id="c_telefone"></div>
-            <div><label>E-mail</label><input id="c_email" type="email"></div>
-          </div>
+<label>
+<input type="checkbox" id="d_evasao">
+Existe evasão escolar
+</label>
+</div>
 
-          <h3>2. Dados do Comércio</h3>
-          <div class="grid-2">
-            <div><label>Nome do Comércio</label><input id="c_comercio"></div>
-            <div><label>Tipo de Comércio</label><input id="c_tipoComercio"></div>
-            <div><label>Possui CNPJ?</label><select id="c_possuiCnpj"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>CNPJ</label><input id="c_cnpj"></div>
-            <div><label>Data de Fundação</label><input id="c_fundacao" type="date"></div>
-            <div><label>Cadastro Municipal?</label><select id="c_cadastroMunicipal"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>Endereço do Comércio</label><input id="c_endereco"></div>
-            <div><label>Bairro/Comunidade</label><input id="c_bairro"></div>
-            <div><label>Ponto de Referência</label><input id="c_referencia"></div>
-          </div>
+<div id="educacaoLista"></div>
 
-          <h3>3. Funcionamento</h3>
-          <label>Dias de Funcionamento</label>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Segunda a sexta"> Segunda a sexta</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Todos os dias"> Todos os dias</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Segunda"> Segunda</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Terça"> Terça</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Quarta"> Quarta</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Quinta"> Quinta</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Sexta"> Sexta</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Sábado"> Sábado</label>
-            <label class="check-item"><input type="checkbox" name="c_dias" value="Domingo"> Domingo</label>
-          </div>
-          <div class="grid-2">
-            <div><label>Horário de Funcionamento</label><input id="c_horario"></div>
-            <div><label>Quantidade de Funcionários</label><input id="c_funcionarios" type="number"></div>
-            <div><label>Funcionários Registrados?</label><select id="c_funcionariosRegistrados"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>Tempo de Funcionamento</label><input id="c_tempo"></div>
-          </div>
+<button type="button"
+class="secondary"
+onclick="addEducacao()">
++ Adicionar Criança
+</button>
 
-          <h3>4. Situação Financeira</h3>
-          <div class="grid-2">
-            <div><label>Principal Fonte de Renda</label><input id="c_fonteRenda"></div>
-            <div><label>Faixa de Renda Mensal</label><select id="c_faixaRenda"><option></option><option>Até 1 salário mínimo</option><option>De 1 a 2 salários mínimos</option><option>De 2 a 5 salários mínimos</option><option>Acima de 5 salários mínimos</option></select></div>
-            <div><label>Conta Bancária Empresarial?</label><select id="c_conta"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>Utiliza Máquina de Cartão?</label><select id="c_cartao"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>Possui Empréstimos/Financiamentos?</label><select id="c_emprestimo"><option></option><option>Sim</option><option>Não</option></select></div>
-          </div>
+<br><br>
 
-          <h3>5. Estrutura do Comércio</h3>
-          <div class="grid-2">
-            <div><label>Tipo do Imóvel</label><select id="c_imovel"><option></option><option>Próprio</option><option>Alugado</option><option>Cedido</option></select></div>
-            <div><label>Condição da Estrutura</label><select id="c_condicao"><option></option><option>Boa</option><option>Regular</option><option>Precária</option></select></div>
-          </div>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" id="c_energia"> Energia Elétrica</label>
-            <label class="check-item"><input type="checkbox" id="c_agua"> Água Encanada</label>
-            <label class="check-item"><input type="checkbox" id="c_internet"> Internet</label>
-            <label class="check-item"><input type="checkbox" id="c_acessibilidade"> Acessibilidade</label>
-          </div>
+<label>Maior escolaridade da família</label>
+<input id="d_escolaridadeFamilia">
+<br><br>
 
-          <h3>6. Necessidades e Demandas</h3>
-          <label>Principais dificuldades</label>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Poucas vendas"> Poucas vendas</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Falta de clientes"> Falta de clientes</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Falta de crédito"> Falta de crédito</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Estrutura inadequada"> Estrutura inadequada</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Divulgação insuficiente"> Divulgação insuficiente</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Segurança"> Segurança</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Transporte"> Transporte</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Energia/Internet"> Energia/Internet</label>
-            <label class="check-item"><input type="checkbox" name="c_dificuldades" value="Impostos altos"> Impostos altos</label>
-          </div>
-          <label>Outras dificuldades</label><textarea id="c_dificuldadesOutras"></textarea>
-          <div class="grid-2">
-            <div><label>Necessita de apoio/incentivo?</label><select id="c_apoio"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>Qual apoio?</label><input id="c_apoioQual"></div>
-            <div><label>Interesse em cursos/capacitações?</label><select id="c_cursos"><option></option><option>Sim</option><option>Não</option></select></div>
-            <div><label>Área de interesse</label><input id="c_areaInteresse"></div>
-          </div>
-          <h3>7. Observações Gerais</h3>
-          <textarea id="c_observacoes"></textarea>
-        </div>
+<button type="submit" class="main">
+Salvar Cadastro
+</button>
 
-        <div class="btn-row">
-          <button type="submit" class="main" id="btnSalvar">Salvar Cadastro</button>
-          <button type="button" class="secondary" onclick="limparFormulario()">Limpar</button>
-        </div>
-      </form>
-    </section>
+</form>
+</section>
 
-    <section id="registros">
-      <h2>Registros do Censo</h2>
-      <div class="btn-row" style="margin-bottom:14px">
-        <button class="main" onclick="gerarPDFRegistros()">Gerar PDF de Todos os Registros</button>
-        <button class="secondary" onclick="window.print()">Imprimir Tela</button>
-      </div>
-      <input class="search-box" id="pesquisa" oninput="listarRegistros()" placeholder="Pesquisar por nome, comércio, telefone, povoado, usuário responsável...">
-      <div id="listaRegistros"></div>
-    </section>
-
-    <section id="relatorios">
-      <h2>Relatórios e Exportação</h2>
-      <p>Administrador vê todos os registros. Usuário comum vê apenas os cadastros feitos por ele.</p>
-      <div class="btn-row">
-        <button class="main" onclick="exportarCSV()">Exportar Excel/CSV</button>
-        <button class="main" onclick="gerarPDFRegistros()">Gerar PDF dos Registros</button>
-        <button class="main" onclick="gerarPDFRelatorioGraficos()">Gerar PDF dos Gráficos</button>
-        <button class="secondary" onclick="sincronizarPendentes()">Enviar Pendentes ao Google Drive</button>
-        <button id="btnApagarTudo" class="danger" onclick="apagarTudo()">Apagar Todos os Dados</button>
-      </div>
-      <div id="resumoRelatorio" style="margin-top:18px"></div>
-      <div class="chart-box">
-        <h3>Gráfico por Tipo de Cadastro</h3>
-        <canvas id="graficoTipo" width="900" height="320"></canvas>
-      </div>
-      <div class="chart-box">
-        <h3>Gráfico por Recenseador</h3>
-        <canvas id="graficoUsuario" width="900" height="320"></canvas>
-      </div>
-    </section>
-
-    <section id="admin">
-      <h2>Painel do Administrador</h2>
-      <div id="adminMsg"></div>
-      <div class="registro">
-        <h3>Criar Novo Usuário</h3>
-        <div class="grid-2">
-          <div><label>Nome</label><input id="novoNome"></div>
-          <div><label>Usuário</label><input id="novoUsuario"></div>
-          <div><label>Senha</label><input id="novaSenha" type="password"></div>
-          <div><label>Perfil</label><select id="novoPerfil"><option value="usuario">Usuário/Recenseador</option><option value="admin">Administrador</option></select></div>
-        </div>
-        <div class="btn-row">
-          <button class="main" onclick="criarUsuario()">Criar Usuário</button>
-        </div>
-      </div>
-      <div class="registro">
-        <h3>Alterar Minha Senha</h3>
-        <div class="grid-2">
-          <div><label>Senha Atual</label><input id="senhaAtualAdmin" type="password" placeholder="Digite sua senha atual"></div>
-          <div><label>Nova Senha</label><input id="novaSenhaAdmin" type="password" placeholder="Digite a nova senha"></div>
-        </div>
-        <div class="btn-row">
-          <button class="main" onclick="alterarSenhaAdmin()">Alterar Senha</button>
-        </div>
-      </div>
-      <div class="registro">
-        <h3>Usuários Cadastrados</h3>
-        <div id="listaUsuarios"></div>
-      </div>
-    </section>
-
-    <footer>Sistema de Censo Municipal - Pedra Vermelha</footer>
-  </div>
+</div>
 </div>
 
 <script>
-const STORAGE_KEY='censo_pedra_vermelha_dados_v2';
-const USERS_KEY='censo_pedra_vermelha_usuarios_v2';
-const SESSION_KEY='censo_pedra_vermelha_sessao_v2';
-const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbzztlS07ZMgjebjEgE9_O65sxnmyTur1xiachAF9TGgsS4PvcQYPEK8lRVH42rcFJV3/exec';
 
-function initUsers(){
-  let users=JSON.parse(localStorage.getItem(USERS_KEY)||'[]');
-  if(!users.length){
-    users=[{id:Date.now(),nome:'Administrador',usuario:'admin',senha:'admin123',perfil:'admin',ativo:true,criadoEm:new Date().toLocaleString('pt-BR')}];
-    localStorage.setItem(USERS_KEY,JSON.stringify(users));
-  }
+const STORAGE_KEY='censo';
+
+function obterDados(){
+return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')
 }
-function getUsers(){return JSON.parse(localStorage.getItem(USERS_KEY)||'[]')}
-function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u))}
-function getSession(){return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}
-function setSession(u){localStorage.setItem(SESSION_KEY,JSON.stringify(u))}
-function obterDados(){return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}
-function salvarDados(d){localStorage.setItem(STORAGE_KEY,JSON.stringify(d))}
-function isAdmin(){return getSession()?.perfil==='admin'}
-function msg(el,txt,tipo='notice'){document.getElementById(el).innerHTML=`<div class="${tipo}">${txt}</div>`;setTimeout(()=>document.getElementById(el).innerHTML='',3500)}
-function campo(id){return document.getElementById(id)?.value?.trim()||''}
-function checked(id){return document.getElementById(id)?.checked?'Sim':'Não'}
-function checks(name){return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(x=>x.value).join(', ')}
 
-document.getElementById('loginForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const usuario=campo('loginUsuario'),senha=campo('loginSenha');
-  const u=getUsers().find(x=>x.usuario===usuario&&x.senha===senha&&x.ativo);
-  if(!u){document.getElementById('loginMsg').innerHTML='<div class="error">Usuário ou senha inválidos.</div>';return}
-  setSession({id:u.id,nome:u.nome,usuario:u.usuario,perfil:u.perfil});
-  carregarApp();
+function salvarDados(d){
+localStorage.setItem(STORAGE_KEY,JSON.stringify(d))
+}
+
+function campo(id){
+return document.getElementById(id)?.value||''
+}
+
+function checked(id){
+return document.getElementById(id)?.checked?'Sim':'Não'
+}
+
+function addEducacao(item={}){
+
+const div=document.createElement('div');
+
+div.className='family-row';
+
+div.innerHTML=`
+<input placeholder="Nome"
+value="${item.nome||''}">
+
+<input placeholder="Idade"
+value="${item.idade||''}">
+
+<input placeholder="Escola"
+value="${item.escola||''}">
+
+<input placeholder="Série/Ano"
+value="${item.serie||''}">
+
+<input placeholder="Turno"
+value="${item.turno||''}">
+
+<button
+type="button"
+class="danger"
+onclick="this.parentElement.remove()">
+X
+</button>
+`;
+
+document.getElementById('educacaoLista')
+.appendChild(div);
+
+}
+
+function getEducacao(){
+
+return Array.from(
+document.querySelectorAll(
+'#educacaoLista .family-row'
+)
+).map(r=>{
+
+const i=r.querySelectorAll('input');
+
+return{
+nome:i[0].value,
+idade:i[1].value,
+escola:i[2].value,
+serie:i[3].value,
+turno:i[4].value
+}
+
 });
 
-function carregarApp(){
-  const s=getSession();
-  if(!s){document.getElementById('loginScreen').classList.remove('hidden');document.getElementById('appScreen').classList.add('hidden');return}
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('appScreen').classList.remove('hidden');
-  document.getElementById('usuarioLogadoNome').textContent=s.nome;
-  document.getElementById('usuarioLogadoPerfil').textContent=s.perfil==='admin'?'Administrador':'Usuário/Recenseador';
-  document.getElementById('tabAdmin').style.display=isAdmin()?'inline-block':'none';
-  document.getElementById('btnApagarTudo').style.display=isAdmin()?'inline-block':'none';
-  atualizarPainel();listarRegistros();atualizarResumo();listarUsuarios();
 }
-function sair(){if(confirm('Deseja sair do sistema?')){localStorage.removeItem(SESSION_KEY);location.reload()}}
 
-function abrirAba(id,botao){
-  if(id==='admin'&&!isAdmin()){alert('Acesso permitido apenas ao administrador.');return}
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');botao.classList.add('active');
-  listarRegistros();atualizarResumo();listarUsuarios();
-}
-function trocarFormulario(){
-  const t=campo('tipoFormulario');
-  document.getElementById('formDomiciliar').classList.toggle('hidden',t!=='domiciliar');
-  document.getElementById('formComerciante').classList.toggle('hidden',t!=='comerciante');
-}
-function addFamilia(item={}){
-  const div=document.createElement('div');
-  div.className='family-row';
-  div.innerHTML=`<input placeholder="Nome" value="${item.nome||''}"><input placeholder="Parentesco" value="${item.parentesco||''}"><input placeholder="Idade" type="number" value="${item.idade||''}"><input placeholder="Escolaridade" value="${item.escolaridade||''}"><input placeholder="Profissão" value="${item.profissao||''}"><button type="button" class="danger small" onclick="this.parentElement.remove()">X</button>`;
-  document.getElementById('familiaLista').appendChild(div);
-}
-function getFamilia(){
-  return Array.from(document.querySelectorAll('#familiaLista .family-row')).map(r=>{
-    const i=r.querySelectorAll('input');
-    return {nome:i[0].value,parentesco:i[1].value,idade:i[2].value,escolaridade:i[3].value,profissao:i[4].value};
-  }).filter(x=>x.nome||x.parentesco||x.idade||x.escolaridade||x.profissao);
-}
-function formatarDataHora(){return new Date().toLocaleString('pt-BR')}
+document.getElementById('formCenso')
+.addEventListener('submit',e=>{
 
-document.getElementById('formCenso').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const tipo=campo('tipoFormulario'), sess=getSession(), dados=obterDados(), editIndex=campo('editIndex');
-  let cadastro={tipo,criadoPorId:sess.id,criadoPorUsuario:sess.usuario,criadoPorNome:sess.nome,dataHora:editIndex===''?formatarDataHora():dados[editIndex].dataHora,atualizadoEm:editIndex===''?'':formatarDataHora(),sincronizadoGoogle:false};
+e.preventDefault();
 
-  if(tipo==='domiciliar'){
-    if(!campo('d_nome')){alert('Informe o nome completo.');return}
-    cadastro.titulo=campo('d_nome');
-    cadastro.dados={
-      nome:campo('d_nome'),nascimento:campo('d_nascimento'),idade:campo('d_idade'),sexo:campo('d_sexo'),estadoCivil:campo('d_estadoCivil'),telefone:campo('d_telefone'),mae:campo('d_mae'),naturalidade:campo('d_naturalidade'),
-      povoado:campo('d_povoado'),rua:campo('d_rua'),numero:campo('d_numero'),referencia:campo('d_referencia'),cep:campo('d_cep'),familia:getFamilia(),
-      situacaoCasa:campo('d_situacaoCasa'),construcao:campo('d_construcao'),comodos:campo('d_comodos'),banheiros:campo('d_banheiros'),agua:checked('d_agua'),energia:checked('d_energia'),lixo:checked('d_lixo'),internet:checked('d_internet'),saneamento:checked('d_saneamento'),saneamentoQual:campo('d_saneamentoQual'),
-      respFinanceiro:campo('d_respFinanceiro'),profissao:campo('d_profissao'),trabalho:campo('d_trabalho'),localTrabalho:campo('d_localTrabalho'),renda:campo('d_renda'),beneficios:checks('d_beneficios'),beneficiosOutros:campo('d_beneficiosOutros'),
-      deficiencia:checked('d_deficiencia'),doencaCronica:checked('d_doencaCronica'),acompanhamento:checked('d_acompanhamento'),doencaQual:campo('d_doencaQual'),unidadeSaude:campo('d_unidadeSaude'),
-      escola:checked('d_escola'),nomeEscola:campo('d_nomeEscola'),evasao:checked('d_evasao'),escolaridadeFamilia:campo('d_escolaridadeFamilia'),cursos:campo('d_cursos'),areaInteresse:campo('d_areaInteresse'),observacoes:campo('d_observacoes')
-    };
-  }else{
-    if(!campo('c_nome')){alert('Informe o nome do responsável.');return}
-    cadastro.titulo=campo('c_nome');
-    cadastro.dados={
-      nome:campo('c_nome'),nascimento:campo('c_nascimento'),idade:campo('c_idade'),sexo:campo('c_sexo'),estadoCivil:campo('c_estadoCivil'),telefone:campo('c_telefone'),email:campo('c_email'),
-      comercio:campo('c_comercio'),tipoComercio:campo('c_tipoComercio'),possuiCnpj:campo('c_possuiCnpj'),cnpj:campo('c_cnpj'),fundacao:campo('c_fundacao'),cadastroMunicipal:campo('c_cadastroMunicipal'),endereco:campo('c_endereco'),bairro:campo('c_bairro'),referencia:campo('c_referencia'),
-      dias:checks('c_dias'),horario:campo('c_horario'),funcionarios:campo('c_funcionarios'),funcionariosRegistrados:campo('c_funcionariosRegistrados'),tempo:campo('c_tempo'),
-      fonteRenda:campo('c_fonteRenda'),faixaRenda:campo('c_faixaRenda'),conta:campo('c_conta'),cartao:campo('c_cartao'),emprestimo:campo('c_emprestimo'),
-      imovel:campo('c_imovel'),condicao:campo('c_condicao'),energia:checked('c_energia'),agua:checked('c_agua'),internet:checked('c_internet'),acessibilidade:checked('c_acessibilidade'),
-      dificuldades:checks('c_dificuldades'),dificuldadesOutras:campo('c_dificuldadesOutras'),apoio:campo('c_apoio'),apoioQual:campo('c_apoioQual'),cursos:campo('c_cursos'),areaInteresse:campo('c_areaInteresse'),observacoes:campo('c_observacoes')
-    };
-  }
-  if(editIndex==='')dados.push(cadastro);else dados[editIndex]=cadastro;
-  salvarDados(dados);
+const dados=obterDados();
 
-  const enviado=await enviarParaGoogleSheets(cadastro);
-  if(enviado){
-    alert('Cadastro salvo no aparelho e enviado para a planilha.');
-  }else{
-    alert('Cadastro salvo no aparelho, mas não foi enviado para a planilha. Verifique o Apps Script.');
-  }
+dados.push({
 
-  limparFormulario();atualizarPainel();listarRegistros();atualizarResumo();
+responsavelFinanceiro:
+campo('d_respFinanceiro'),
+
+profissao:
+campo('d_profissao'),
+
+haCriancas:
+checked('d_escola'),
+
+evasao:
+checked('d_evasao'),
+
+educacao:
+getEducacao(),
+
+escolaridade:
+campo('d_escolaridadeFamilia')
+
 });
 
-async function enviarParaGoogleSheets(cad){
-  if(!GOOGLE_SCRIPT_URL)return false;
-  try{
-    const form=new FormData();
-    form.append('acao','salvar');
-    form.append('tipo',cad.tipo||'');
-    form.append('titulo',cad.titulo||'');
-    form.append('dataHora',cad.dataHora||'');
-    form.append('criadoPor',cad.criadoPorUsuario||'');
-    form.append('criadoPorNome',cad.criadoPorNome||'');
-    form.append('dadosJSON',JSON.stringify(cad.dados||{}));
-    form.append('cache',Date.now());
+salvarDados(dados);
 
-    await fetch(GOOGLE_SCRIPT_URL,{
-      method:'POST',
-      mode:'no-cors',
-      body:form
-    });
+alert('Cadastro salvo com sucesso');
 
-    return true;
-  }catch(e){
-    console.error('Erro ao enviar para Google Sheets:',e);
-    return false;
-  }
-}
+document.getElementById('formCenso').reset();
 
-function limparFormulario(){
-  document.getElementById('formCenso').reset();
-  document.getElementById('tipoFormulario').value='domiciliar';
-  document.getElementById('editIndex').value='';
-  document.getElementById('btnSalvar').textContent='Salvar Cadastro';
-  document.getElementById('familiaLista').innerHTML='';
-  addFamilia();
-  trocarFormulario();
-}
-function dadosVisiveis(){
-  const d=obterDados(),s=getSession();
-  return isAdmin()?d:d.filter(x=>x.criadoPorId===s.id||x.criadoPorUsuario===s.usuario);
-}
-function atualizarPainel(){
-  const d=dadosVisiveis();
-  document.getElementById('totalCadastros').textContent=d.length;
-  document.getElementById('totalDomiciliar').textContent=d.filter(x=>x.tipo==='domiciliar').length;
-  document.getElementById('totalComerciante').textContent=d.filter(x=>x.tipo==='comerciante').length;
-  document.getElementById('totalUsuarios').textContent=getUsers().length;
-}
-function textoRegistro(c){
-  return JSON.stringify(c).toLowerCase();
-}
+document.getElementById('educacaoLista')
+.innerHTML='';
 
-function nomeCampo(k){
-  const nomes={
-    nome:'Nome',nascimento:'Data de Nascimento',idade:'Idade',sexo:'Sexo',estadoCivil:'Estado Civil',telefone:'Telefone',mae:'Nome da Mãe',naturalidade:'Naturalidade',
-    povoado:'Povoado/Comunidade',rua:'Rua/Avenida',numero:'Número',referencia:'Ponto de Referência',cep:'CEP',familia:'Composição Familiar',situacaoCasa:'Situação da Casa',construcao:'Tipo de Construção',comodos:'Quantidade de Cômodos',banheiros:'Quantidade de Banheiros',agua:'Água Encanada',energia:'Energia Elétrica',lixo:'Coleta de Lixo',internet:'Internet',saneamento:'Saneamento Básico',saneamentoQual:'Tipo de Saneamento',
-    respFinanceiro:'Responsável Financeiro',profissao:'Profissão',trabalho:'Situação de Trabalho',localTrabalho:'Local de Trabalho',renda:'Renda Familiar Mensal',beneficios:'Benefícios Sociais',beneficiosOutros:'Outros Benefícios',deficiencia:'Pessoa com Deficiência',doencaCronica:'Doença Crônica',acompanhamento:'Acompanhamento Médico',doencaQual:'Doença/Deficiência',unidadeSaude:'Unidade de Saúde',
-    escola:'Frequenta Escola',nomeEscola:'Nome da Escola',evasao:'Evasão Escolar',escolaridadeFamilia:'Escolaridade da Família',cursos:'Interesse em Cursos/Capacitações',areaInteresse:'Área de Interesse',observacoes:'Observações',
-    email:'E-mail',comercio:'Nome do Comércio',tipoComercio:'Tipo de Comércio',possuiCnpj:'Possui CNPJ',cnpj:'CNPJ',fundacao:'Data de Fundação',cadastroMunicipal:'Cadastro Municipal',endereco:'Endereço',bairro:'Bairro/Comunidade',dias:'Dias de Funcionamento',horario:'Horário de Funcionamento',funcionarios:'Quantidade de Funcionários',funcionariosRegistrados:'Funcionários Registrados',tempo:'Tempo de Funcionamento',fonteRenda:'Principal Fonte de Renda',faixaRenda:'Faixa de Renda Mensal',conta:'Conta Bancária Empresarial',cartao:'Máquina de Cartão',emprestimo:'Empréstimos/Financiamentos',imovel:'Tipo do Imóvel',condicao:'Condição da Estrutura',acessibilidade:'Acessibilidade',dificuldades:'Principais Dificuldades',dificuldadesOutras:'Outras Dificuldades',apoio:'Necessita de Apoio',apoioQual:'Qual Apoio',c_cursos:'Interesse em Cursos',areaInteresse:'Área de Interesse'
-  };
-  return nomes[k]||k;
-}
-function escapeHTML(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
-function valorFormatado(v){
-  if(Array.isArray(v)){
-    if(!v.length)return 'Não informado';
-    return '<table class="detail-table"><thead><tr><th>Nome</th><th>Parentesco</th><th>Idade</th><th>Escolaridade</th><th>Profissão</th></tr></thead><tbody>'+v.map(f=>`<tr><td>${escapeHTML(f.nome)}</td><td>${escapeHTML(f.parentesco)}</td><td>${escapeHTML(f.idade)}</td><td>${escapeHTML(f.escolaridade)}</td><td>${escapeHTML(f.profissao)}</td></tr>`).join('')+'</tbody></table>';
-  }
-  return escapeHTML(v||'Não informado');
-}
-function montarDetalhesHTML(c){
-  const d=c.dados||{};
-  let html=`<table class="detail-table"><tbody><tr><th>Tipo</th><td>${c.tipo==='domiciliar'?'Censo Domiciliar':'Censo Comerciante'}</td></tr><tr><th>Título</th><td>${escapeHTML(c.titulo||'')}</td></tr><tr><th>Data/Hora</th><td>${escapeHTML(c.dataHora||'')}</td></tr><tr><th>Criado por</th><td>${escapeHTML(c.criadoPorNome||c.criadoPorUsuario||'')}</td></tr>`;
-  Object.keys(d).forEach(k=>{html+=`<tr><th>${nomeCampo(k)}</th><td>${valorFormatado(d[k])}</td></tr>`});
-  html+='</tbody></table>';
-  return html;
-}
+addEducacao();
 
-function listarRegistros(){
-  const lista=document.getElementById('listaRegistros'); if(!lista)return;
-  const termo=(campo('pesquisa')||'').toLowerCase();
-  const todos=obterDados();
-  const vis=dadosVisiveis().filter(x=>textoRegistro(x).includes(termo));
-  if(!vis.length){lista.innerHTML='<div class="empty">Nenhum cadastro encontrado.</div>';return}
-  lista.innerHTML=vis.map(c=>{
-    const index=todos.indexOf(c), d=c.dados||{};
-    return `<div class="registro">
-      <h3>${c.tipo==='domiciliar'?'Domiciliar':'Comerciante'} - ${c.titulo||'Sem nome'}</h3>
-      <p><strong>Telefone:</strong> ${d.telefone||'Não informado'}</p>
-      <p><strong>Local:</strong> ${d.povoado||d.bairro||d.endereco||'Não informado'}</p>
-      <p><strong>Criado por:</strong> ${c.criadoPorNome||c.criadoPorUsuario}</p>
-      <p><strong>Data/Hora:</strong> ${c.dataHora}</p>
-      ${c.atualizadoEm?`<p><strong>Atualizado em:</strong> ${c.atualizadoEm}</p>`:''}
-      <details><summary><strong>Ver detalhes</strong></summary>${montarDetalhesHTML(c)}</details>
-      <div class="acoes">
-        <button class="main small" onclick="gerarPDFRegistroIndividual(${index})">Gerar PDF</button>
-        <button class="warn small" onclick="editarRegistro(${index})">Editar</button>
-        <button class="danger small" onclick="excluirRegistro(${index})">Excluir</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-function editarRegistro(index){
-  const c=obterDados()[index]; if(!c)return;
-  if(!isAdmin()&&c.criadoPorId!==getSession().id){alert('Você só pode editar seus próprios registros.');return}
-  limparFormulario();
-  document.getElementById('editIndex').value=index;
-  document.getElementById('tipoFormulario').value=c.tipo; trocarFormulario();
-  const d=c.dados||{};
-  Object.keys(d).forEach(k=>{
-    const ids=[`d_${k}`,`c_${k}`];
-    ids.forEach(id=>{const el=document.getElementById(id); if(el&&el.type!=='checkbox') el.value=d[k]||'';});
-  });
-  if(c.tipo==='domiciliar'){
-    ['agua','energia','lixo','internet','saneamento','deficiencia','doencaCronica','acompanhamento','escola','evasao'].forEach(k=>{const el=document.getElementById('d_'+k); if(el)el.checked=d[k]==='Sim'});
-    document.getElementById('familiaLista').innerHTML=''; (d.familia||[]).forEach(addFamilia); if(!(d.familia||[]).length)addFamilia();
-  }else{
-    ['energia','agua','internet','acessibilidade'].forEach(k=>{const el=document.getElementById('c_'+k); if(el)el.checked=d[k]==='Sim'});
-  }
-  document.getElementById('btnSalvar').textContent='Atualizar Cadastro';
-  abrirAba('cadastro',document.querySelector('.tabs button'));
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function excluirRegistro(index){
-  const d=obterDados(), c=d[index]; if(!c)return;
-  if(!isAdmin()&&c.criadoPorId!==getSession().id){alert('Você só pode excluir seus próprios registros.');return}
-  if(!confirm('Deseja excluir este cadastro?'))return;
-  d.splice(index,1);salvarDados(d);atualizarPainel();listarRegistros();atualizarResumo();
-}
-function atualizarResumo(){
-  const el=document.getElementById('resumoRelatorio'); if(!el)return;
-  const d=dadosVisiveis();
-  el.innerHTML=`<div class="registro"><h3>Resumo Geral</h3>
-    <p><strong>Total:</strong> ${d.length}</p>
-    <p><strong>Domiciliar:</strong> ${d.filter(x=>x.tipo==='domiciliar').length}</p>
-    <p><strong>Comerciante:</strong> ${d.filter(x=>x.tipo==='comerciante').length}</p>
-  </div>`;
-  setTimeout(renderizarGraficos,50);
-}
-async function sincronizarPendentes(){
-  const d=dadosVisiveis();
-  for(const c of d) await enviarParaGoogleSheets(c);
-  alert('Tentativa de envio concluída.');
-}
-
-function desenharBarras(canvasId, labels, valores){
-  const canvas=document.getElementById(canvasId); if(!canvas)return;
-  const ctx=canvas.getContext('2d'), w=canvas.width, h=canvas.height;
-  ctx.clearRect(0,0,w,h); ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h);
-  ctx.fillStyle='#0f4c81'; ctx.font='bold 16px Arial';
-  const max=Math.max(1,...valores), margem=55, areaW=w-margem*2, areaH=h-90, barW=areaW/Math.max(1,labels.length)*0.55;
-  ctx.strokeStyle='#cfd8e3'; ctx.beginPath(); ctx.moveTo(margem,25); ctx.lineTo(margem,h-55); ctx.lineTo(w-25,h-55); ctx.stroke();
-  labels.forEach((lab,i)=>{
-    const x=margem+(areaW/labels.length)*i+(areaW/labels.length-barW)/2;
-    const bh=(valores[i]/max)*areaH;
-    const y=h-55-bh;
-    ctx.fillStyle='#1976d2'; ctx.fillRect(x,y,barW,bh);
-    ctx.fillStyle='#1f2937'; ctx.font='bold 14px Arial'; ctx.fillText(String(valores[i]),x+barW/2-5,y-8);
-    ctx.font='12px Arial'; ctx.fillText(String(lab).slice(0,18),x,h-32);
-  });
-}
-function renderizarGraficos(){
-  const d=dadosVisiveis();
-  desenharBarras('graficoTipo',['Domiciliar','Comerciante'],[d.filter(x=>x.tipo==='domiciliar').length,d.filter(x=>x.tipo==='comerciante').length]);
-  const porUsuario={}; d.forEach(c=>{const n=c.criadoPorNome||c.criadoPorUsuario||'Não informado'; porUsuario[n]=(porUsuario[n]||0)+1});
-  desenharBarras('graficoUsuario',Object.keys(porUsuario),Object.values(porUsuario));
-}
-function abrirJanelaPDF(titulo, corpo){
-  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${titulo}</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:22px;color:#111;background:#fff}h1{color:#0f4c81;text-align:center;margin-bottom:8px}h2{margin-top:22px;color:#0f4c81}.sub{text-align:center;margin-bottom:18px;color:#444}.registro{page-break-inside:avoid;border:1px solid #ccc;border-radius:10px;padding:12px;margin-bottom:14px}.detail-table{width:100%;border-collapse:collapse;margin-top:8px}.detail-table th,.detail-table td{border:1px solid #ccc;padding:7px;font-size:12px;text-align:left;vertical-align:top}.detail-table th{background:#eef6ff;width:32%}img{max-width:100%;border:1px solid #ddd;border-radius:10px;margin:10px 0}.print-btn{background:#0f4c81;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:bold;cursor:pointer;margin-bottom:18px}@media print{.print-btn{display:none}body{padding:8px}.registro{break-inside:avoid;page-break-inside:avoid}}</style></head><body><button class="print-btn" onclick="window.print()">Imprimir / Salvar em PDF</button>${corpo}</body></html>`;
-
-  const w=window.open('', '_blank');
-  if(w && w.document){
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
-    setTimeout(()=>{try{w.focus();w.print();}catch(e){}},800);
-    return;
-  }
-
-  // Caso o navegador bloqueie pop-up, gera um arquivo HTML do relatório para abrir e imprimir.
-  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=(titulo||'relatorio').toLowerCase().replace(/[^a-z0-9]+/g,'_')+'.html';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
-  alert('O navegador bloqueou a janela do PDF. Foi baixado um arquivo HTML do relatório. Abra o arquivo e clique em Imprimir / Salvar em PDF.');
-}
-function gerarPDFRegistros(){
-  const d=dadosVisiveis(); if(!d.length){alert('Não existem registros para gerar PDF.');return}
-  const corpo='<h1>Relatório de Registros do Censo Pedra Vermelha</h1><p><strong>Gerado em:</strong> '+formatarDataHora()+'</p>'+d.map(c=>`<div class="registro"><h2>${c.tipo==='domiciliar'?'Domiciliar':'Comerciante'} - ${escapeHTML(c.titulo||'Sem nome')}</h2>${montarDetalhesHTML(c)}</div>`).join('');
-  abrirJanelaPDF('PDF dos Registros',corpo);
-}
-function gerarPDFRegistroIndividual(index){
-  const c=obterDados()[index];
-  if(!c){alert('Registro não encontrado.');return}
-  if(!isAdmin()&&c.criadoPorId!==getSession().id&&c.criadoPorUsuario!==getSession().usuario){alert('Você só pode gerar PDF dos seus próprios registros.');return}
-  const corpo=`<h1>Registro do Censo Pedra Vermelha</h1><p><strong>Gerado em:</strong> ${formatarDataHora()}</p><div class="registro"><h2>${c.tipo==='domiciliar'?'Domiciliar':'Comerciante'} - ${escapeHTML(c.titulo||'Sem nome')}</h2>${montarDetalhesHTML(c)}</div>`;
-  abrirJanelaPDF('PDF do Registro',corpo);
-}
-function gerarPDFRelatorioGraficos(){
-  renderizarGraficos();
-  const d=dadosVisiveis();
-  const img1=document.getElementById('graficoTipo')?.toDataURL('image/png')||'';
-  const img2=document.getElementById('graficoUsuario')?.toDataURL('image/png')||'';
-  const corpo=`<h1>Relatório Geral com Gráficos</h1><p><strong>Gerado em:</strong> ${formatarDataHora()}</p><div class="registro"><h2>Resumo</h2><p><strong>Total:</strong> ${d.length}</p><p><strong>Domiciliar:</strong> ${d.filter(x=>x.tipo==='domiciliar').length}</p><p><strong>Comerciante:</strong> ${d.filter(x=>x.tipo==='comerciante').length}</p></div><h2>Gráfico por Tipo de Cadastro</h2><img src="${img1}"><h2>Gráfico por Recenseador</h2><img src="${img2}">`;
-  abrirJanelaPDF('PDF dos Gráficos',corpo);
-}
-
-function exportarCSV(){
-  const d=dadosVisiveis(); if(!d.length){alert('Não existem dados para exportar.');return}
-  const rows=[['Tipo','Título','Data/Hora','Criado Por','Dados JSON'],...d.map(c=>[c.tipo,c.titulo,c.dataHora,c.criadoPorUsuario,JSON.stringify(c.dados||{})])];
-  const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(';')).join('\n');
-  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='censo_pedra_vermelha.csv';a.click();URL.revokeObjectURL(a.href);
-}
-function apagarTudo(){
-  if(!isAdmin()){alert('Apenas o administrador pode apagar todos os dados.');return}
-  if(confirm('Isso apagará todos os cadastros deste aparelho. Continuar?')){localStorage.removeItem(STORAGE_KEY);atualizarPainel();listarRegistros();atualizarResumo()}
-}
-
-function criarUsuario(){
-  if(!isAdmin())return;
-  const nome=campo('novoNome'),usuario=campo('novoUsuario'),senha=campo('novaSenha'),perfil=campo('novoPerfil');
-  if(!nome||!usuario||!senha){msg('adminMsg','Preencha nome, usuário e senha.','error');return}
-  const users=getUsers();
-  if(users.some(u=>u.usuario===usuario)){msg('adminMsg','Este usuário já existe.','error');return}
-  users.push({id:Date.now(),nome,usuario,senha,perfil,ativo:true,criadoEm:new Date().toLocaleString('pt-BR')});
-  saveUsers(users);
-  document.getElementById('novoNome').value='';document.getElementById('novoUsuario').value='';document.getElementById('novaSenha').value='';document.getElementById('novoPerfil').value='usuario';
-  listarUsuarios();atualizarPainel();msg('adminMsg','Usuário criado com sucesso.');
-}
-function listarUsuarios(){
-  const el=document.getElementById('listaUsuarios'); if(!el)return;
-  if(!isAdmin()){el.innerHTML='';return}
-  const users=getUsers();
-  el.innerHTML=`<table><thead><tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead><tbody>`+
-    users.map(u=>`<tr><td>${u.nome}</td><td>${u.usuario}</td><td>${u.perfil}</td><td>${u.ativo?'Ativo':'Desativado'}</td><td>
-      <button class="small ${u.ativo?'warn':'main'}" onclick="toggleUsuario(${u.id})">${u.ativo?'Desativar':'Ativar'}</button>
-      <button class="small danger" onclick="removerUsuario(${u.id})">Excluir</button>
-    </td></tr>`).join('')+`</tbody></table>`;
-}
-function toggleUsuario(id){
-  const sess=getSession(), users=getUsers(), u=users.find(x=>x.id===id);
-  if(!u)return; if(u.id===sess.id){alert('Você não pode desativar seu próprio usuário.');return}
-  u.ativo=!u.ativo; saveUsers(users); listarUsuarios();
-}
-function removerUsuario(id){
-  const sess=getSession(); if(id===sess.id){alert('Você não pode excluir seu próprio usuário.');return}
-  if(!confirm('Excluir este usuário?'))return;
-  saveUsers(getUsers().filter(u=>u.id!==id)); listarUsuarios(); atualizarPainel();
-}
-function alterarSenhaAdmin(){
-  if(!isAdmin()){alert('Apenas o administrador pode alterar a senha nesta opção.');return}
-  const atual=campo('senhaAtualAdmin');
-  const nova=campo('novaSenhaAdmin');
-  if(!atual||!nova){alert('Preencha a senha atual e a nova senha.');return}
-  if(nova.length<4){alert('A nova senha deve ter pelo menos 4 caracteres.');return}
-  const sess=getSession();
-  const users=getUsers();
-  const u=users.find(x=>x.id===sess.id);
-  if(!u){alert('Usuário não encontrado. Faça login novamente.');return}
-  if(u.senha!==atual){alert('Senha atual incorreta.');return}
-  u.senha=nova;
-  saveUsers(users);
-  document.getElementById('senhaAtualAdmin').value='';
-  document.getElementById('novaSenhaAdmin').value='';
-  alert('Senha alterada com sucesso!');
-}
-
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&e.target.tagName!=='TEXTAREA'){
-    if(!document.getElementById('loginScreen').classList.contains('hidden'))return;
-    const cad=document.getElementById('cadastro').classList.contains('active');
-    if(cad){e.preventDefault();document.getElementById('formCenso').requestSubmit();}
-  }
 });
-initUsers(); addFamilia(); carregarApp();
+  addEducacao();
+
+document.getElementById('loginForm')
+.addEventListener('submit',function(e){
+
+e.preventDefault();
+
+const usuario=
+document.getElementById('loginUsuario').value;
+
+const senha=
+document.getElementById('loginSenha').value;
+
+if(usuario==='admin' && senha==='admin123'){
+
+document.getElementById('loginScreen')
+.classList.add('hidden');
+
+document.getElementById('appScreen')
+.classList.remove('hidden');
+
+}else{
+
+document.getElementById('loginMsg')
+.innerHTML=
+'<div class="notice" style="background:#ffdede;color:red">Usuário ou senha inválidos</div>';
+
+}
+
+});
+
 </script>
+
 </body>
 </html>
